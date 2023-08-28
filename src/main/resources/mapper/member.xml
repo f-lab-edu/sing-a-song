@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.singasong.member.repository.MemberRepository">
+
+    <select id="findByUserId" parameterType="java.lang.String" resultType="project.singasong.member.domain.Member">
+        SELECT
+            id,
+            user_key,
+            join_type,
+            join_date,
+            name,
+            gender,
+            age_group
+        FROM member
+        WHERE user_key = #{userKey}
+    </select>
+
+    <insert id="create" parameterType="project.singasong.member.domain.Member">
+        INSERT INTO member(
+            id,
+            user_key,
+            join_type,
+            join_date,
+            name,
+            gender,
+            age_group
+        ) VALUES (
+            #{id},
+            #{userKey},
+            #{joinType},
+            NOW(),
+            #{name},
+            #{gender},
+            #{ageGroup}
+        )
+    </insert>
+
+    <update id="update" parameterType="project.singasong.member.domain.Member">
+        UPDATE member SET
+            age_group = #{ageGroup}
+        WHERE user_key = #{userKey}
+  </update>
+
+</mapper>
