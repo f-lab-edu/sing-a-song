@@ -1,4 +1,4 @@
-package project.singasong.login.dto.naver;
+package project.singasong.oauth.naver.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class NaverCallbackInfoDto {
+public class NaverLoginUserDto {
 
-    private String resultcode;
-    private String message;
-    private NaverLoginUserDto response;
+    private String id;
+    private String age;
+    private String gender;
+    private String name;
 
 }

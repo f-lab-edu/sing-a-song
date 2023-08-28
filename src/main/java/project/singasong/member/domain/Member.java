@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.singasong.oauth.naver.dto.NaverLoginUserDto;
 import project.singasong.member.enums.JoinType;
 
 @Getter
@@ -21,5 +22,15 @@ public class Member {
     private String name;
     private String gender;
     private String ageGroup;
+
+    public static Member of(NaverLoginUserDto naverLoginUserDto) {
+        return Member.builder()
+            .userKey(naverLoginUserDto.getId())
+            .ageGroup(naverLoginUserDto.getAge())
+            .gender(naverLoginUserDto.getGender())
+            .name(naverLoginUserDto.getName())
+            .joinType(JoinType.NAVER)
+            .build();
+    }
 
 }
