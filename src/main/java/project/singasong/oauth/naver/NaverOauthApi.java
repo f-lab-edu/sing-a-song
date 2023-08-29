@@ -1,10 +1,10 @@
-package project.singasong.login.oauth.naver;
+package project.singasong.oauth.naver;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,27 +13,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import project.singasong.login.dto.naver.NaverCallbackInfoDto;
-import project.singasong.login.dto.naver.NaverLoginUserDto;
-import project.singasong.login.dto.naver.NaverOauthDto;
+import project.singasong.oauth.naver.dto.NaverCallbackInfoDto;
+import project.singasong.oauth.naver.dto.NaverLoginUserDto;
+import project.singasong.oauth.naver.dto.NaverOauthDto;
+import project.singasong.oauth.naver.properties.NaverSecretProperty;
 
 @Component
 @RequiredArgsConstructor
 public class NaverOauthApi {
 
-    @Value("${naver.url.getAuthorization}")
-    private String GET_AUTHORIZATION_URL;
-    @Value("${naver.url.getToken}")
-    private String GET_TOKEN_URL;
-    @Value("${naver.url.getUserInfo}")
-    private String GET_USER_INFO_URL;
-    @Value("${oAuthCommon.callback.url}")
-    private String REDIRECT_URI;
-    @Value("${naver.client.id}")
-    private String CLIENT_ID;
-    @Value("${naver.client.secret}")
-    private String CLIENT_SECRET;
-
+    private final NaverSecretProperty naverSecretProperty;
     private final String SESSION_STATE = "NAVER_OAUTH_STATE";
 
     public String getAuthorizationUrlWithParams(HttpSession session) {
@@ -41,15 +30,15 @@ public class NaverOauthApi {
         setSession(session, state);
 
         StringBuilder url = new StringBuilder();
-        url.append(GET_AUTHORIZATION_URL)
-            .append("&client_id=" + CLIENT_ID)
+        url.append(naverSecretProperty.getAuthorizationUrl())
+            .append("&client_id=" + naverSecretProperty.getClientId())
             .append("&state=" + state)
-            .append("&redirect_uri=" + REDIRECT_URI);
+            .append("&redirect_uri=" + naverSecretProperty.getRedirectUrl());
 
         return url.toString();
     }
 
-    public NaverLoginUserDto getAccessTokenWithParams(HttpSession session, String code, String state) {
+    public Optional<NaverLoginUserDto> getAccessTokenWithParams(HttpSession session, String code, String state) {
         String sessionState = getSession(session);
 
         if (StringUtils.equals(sessionState, state)) {
@@ -58,7 +47,7 @@ public class NaverOauthApi {
             ResponseEntity<NaverOauthDto> naverTokenInfo = getToken(state, code);
             ResponseEntity<NaverCallbackInfoDto> loginUserInfo = getUserProfile(naverTokenInfo.getBody());
 
-            return loginUserInfo.getBody().getResponse();
+            return Optional.ofNullable(loginUserInfo.getBody().getResponse());
         }
 
         return null;
@@ -79,8 +68,8 @@ public class NaverOauthApi {
     private ResponseEntity<NaverOauthDto> getToken(String state, String code) {
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", CLIENT_ID);
-        params.add("client_secret", CLIENT_SECRET);
+        params.add("client_id", naverSecretProperty.getClientId());
+        params.add("client_secret", naverSecretProperty.getClientSecret());
         params.add("grant_type", "authorization_code");
         params.add("state", state);
         params.add("code", code);
@@ -88,7 +77,7 @@ public class NaverOauthApi {
         HttpEntity<MultiValueMap<String,String>> naverTokenRequest = new HttpEntity<>(params, new HttpHeaders());
 
         return restTemplate.exchange(
-            GET_TOKEN_URL,
+            naverSecretProperty.getTokenUrl(),
             HttpMethod.POST,
             naverTokenRequest,
             NaverOauthDto.class
@@ -103,7 +92,7 @@ public class NaverOauthApi {
         HttpEntity<MultiValueMap<String,String>> naverProfileRequest= new HttpEntity<>(headers);
 
         return restTemplate.exchange(
-            GET_USER_INFO_URL,
+            naverSecretProperty.getUserInfoUrl(),
             HttpMethod.POST,
             naverProfileRequest,
             NaverCallbackInfoDto.class

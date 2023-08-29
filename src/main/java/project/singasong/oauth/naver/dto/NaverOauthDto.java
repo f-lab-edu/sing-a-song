@@ -1,4 +1,4 @@
-package project.singasong.login.dto.naver;
+package project.singasong.oauth.naver.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
