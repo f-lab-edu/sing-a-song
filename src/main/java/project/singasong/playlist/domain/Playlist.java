@@ -1,4 +1,4 @@
-package project.singasong.oauth.naver.dto;
+package project.singasong.playlist.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,14 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class NaverOauthDto {
+public class Playlist {
 
-    private String access_token;
-    private String refresh_token;
-    private String token_type;
-    private int expires_in;
-
-    private String error;
-    private String error_description;
+    private Long id;
+    private Long userId;
+    private String title;
 
 }

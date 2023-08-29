@@ -9,7 +9,7 @@ import project.singasong.member.domain.Member;
 @Repository
 public interface MemberRepository {
 
-    Optional<Member> findByUserId(String userId);
+    Optional<Member> findByUserKey(String userKey);
     int create(Member member);
     int update(Member member);
 
