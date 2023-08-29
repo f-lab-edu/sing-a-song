@@ -38,8 +38,7 @@ public class LoginController {
     }
 
     @GetMapping("/login/success")
-    public String loginCallback(@RequestParam String code, @RequestParam String state
-                ,HttpSession session, Model model) {
+    public String loginCallback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model) {
 
         Optional<NaverLoginUserDto> loginUser = naverApi.getAccessTokenWithParams(session, code, state);
 
@@ -50,8 +49,7 @@ public class LoginController {
         memberService.create(Member.of(loginUser.get()));
 
         Optional<Member> userProfile = memberService.findByUserKey(loginUser.get().getId());
-        List<Playlist> playlist = playlistService.getFindByUserId(
-            PlaylistPagingDto.of(userProfile.get().getId(), 0L));
+        List<Playlist> playlist = playlistService.getFindByUserId(PlaylistPagingDto.of(userProfile.get().getId(), 0L));
 
         model.addAttribute("loginUser", loginUser.get());
         model.addAttribute("userId", userProfile.get().getId());

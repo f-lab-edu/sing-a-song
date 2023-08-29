@@ -90,8 +90,7 @@ public class NaverOauthApi {
         params.add("state", state);
         params.add("code", code);
 
-        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params,
-            new HttpHeaders());
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params, new HttpHeaders());
 
         return restTemplate.exchange(
             naverSecretProperty.getTokenUrl(),
