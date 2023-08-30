@@ -45,12 +45,28 @@ public class NaverOauthApi {
             setSession(session, state);
 
             ResponseEntity<NaverOauthDto> naverTokenInfo = getToken(state, code);
-            ResponseEntity<NaverCallbackInfoDto> loginUserInfo = getUserProfile(naverTokenInfo.getBody());
+            ResponseEntity<NaverCallbackInfoDto> loginUserInfo = getUserProfile(naverTokenInfo.getBody().getAccess_token(), session);
 
             return Optional.ofNullable(loginUserInfo.getBody().getResponse());
         }
 
-        return null;
+        return Optional.ofNullable(null);
+    }
+
+    public ResponseEntity<NaverCallbackInfoDto> getUserProfile(String accessToken, HttpSession session) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer "+ accessToken);
+        session.setAttribute("accessToken", accessToken);
+
+        HttpEntity<MultiValueMap<String,String>> naverProfileRequest= new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+            naverSecretProperty.getUserInfoUrl(),
+            HttpMethod.POST,
+            naverProfileRequest,
+            NaverCallbackInfoDto.class
+        );
     }
 
     private String generateUuid() {
@@ -67,35 +83,20 @@ public class NaverOauthApi {
 
     private ResponseEntity<NaverOauthDto> getToken(String state, String code) {
         RestTemplate restTemplate = new RestTemplate();
-        MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", naverSecretProperty.getClientId());
         params.add("client_secret", naverSecretProperty.getClientSecret());
         params.add("grant_type", "authorization_code");
         params.add("state", state);
         params.add("code", code);
 
-        HttpEntity<MultiValueMap<String,String>> naverTokenRequest = new HttpEntity<>(params, new HttpHeaders());
+        HttpEntity<MultiValueMap<String, String>> naverTokenRequest = new HttpEntity<>(params, new HttpHeaders());
 
         return restTemplate.exchange(
             naverSecretProperty.getTokenUrl(),
             HttpMethod.POST,
             naverTokenRequest,
             NaverOauthDto.class
-        );
-    }
-
-    private ResponseEntity<NaverCallbackInfoDto> getUserProfile(NaverOauthDto tokenInfo) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer "+ tokenInfo.getAccess_token());
-
-        HttpEntity<MultiValueMap<String,String>> naverProfileRequest= new HttpEntity<>(headers);
-
-        return restTemplate.exchange(
-            naverSecretProperty.getUserInfoUrl(),
-            HttpMethod.POST,
-            naverProfileRequest,
-            NaverCallbackInfoDto.class
         );
     }
 

@@ -1,5 +1,6 @@
 package project.singasong.member.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,12 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    public Optional<Member> findByUserKey(String userKey) {
+        return memberRepository.findByUserKey(userKey);
+    }
+
     public void create(Member member) {
-        Member findMember = memberRepository.findByUserId(member.getUserKey()).orElseGet(() -> {
+        Member findMember = memberRepository.findByUserKey(member.getUserKey()).orElseGet(() -> {
             memberRepository.create(member);
             return member;
         });
