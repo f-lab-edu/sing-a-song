@@ -45,12 +45,12 @@ public class NaverOauthApi {
             setSession(session, state);
 
             ResponseEntity<NaverOauthDto> naverTokenInfo = getToken(state, code);
-            ResponseEntity<NaverCallbackInfoDto> loginUserInfo = getUserProfile(naverTokenInfo.getBody().getAccess_token(), session);
+            ResponseEntity<NaverCallbackInfoDto> loginUserInfo = getUserProfile(naverTokenInfo.getBody().getAccessToken(), session);
 
             return Optional.ofNullable(loginUserInfo.getBody().getResponse());
         }
 
-        return Optional.ofNullable(null);
+        return Optional.empty();
     }
 
     public ResponseEntity<NaverCallbackInfoDto> getUserProfile(String accessToken, HttpSession session) {

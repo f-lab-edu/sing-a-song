@@ -27,6 +27,11 @@
     #save {
       background-color: #E9B9FF;
     }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -36,7 +41,7 @@
       <img src="/images/mic_icon.png" width="40px">
       <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
 
-      <p style="display: inline-block;" id="name">000님</p>
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
       <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
     </div>
 
@@ -51,16 +56,14 @@
       <p style="display: inline-block;"><b>목록명 : </b></p>
       <input type="text" id="title" maxlength="50" style="width: 50%">
       <input type="button" id="save" value="등록" onclick="javascript:save();">
+      <input type="hidden" id="userId" th:value="${session.userId}">
     </div>
   </div>
 </div>
 <script type="text/javascript">
-  const name = "[[${loginUser.name}]]";
-  $("#name").text(name + "님");
-
   function save() {
     const title = $("#title").val();
-    const userId = "[[${userId}]]";
+    const userId = $("#userId").val();
 
     if(title == '') {
       alert("목록명을 입력해 주세요.");
