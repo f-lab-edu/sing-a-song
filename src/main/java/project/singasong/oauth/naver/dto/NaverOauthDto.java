@@ -28,6 +28,6 @@ public class NaverOauthDto {
     private String error;
 
     @JsonProperty("error_description")
-    private String error_description;
+    private String errorDescription;
 
 }
