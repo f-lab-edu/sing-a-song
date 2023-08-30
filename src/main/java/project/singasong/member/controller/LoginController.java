@@ -35,7 +35,7 @@ public class LoginController {
     }
 
     @GetMapping("/login/success")
-    public String loginCallback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model) {
+    public String loginCallback(@RequestParam String code, @RequestParam String state, HttpSession session) {
 
         Optional<NaverLoginUserDto> loginUser = naverApi.getAccessTokenWithParams(session, code, state);
         if(loginUser.isEmpty()) {
