@@ -41,7 +41,6 @@ public class LoginController {
     public String loginCallback(@RequestParam String code, @RequestParam String state, HttpSession session, Model model) {
 
         Optional<NaverLoginUserDto> loginUser = naverApi.getAccessTokenWithParams(session, code, state);
-
         if(loginUser.isEmpty()) {
             return "redirect:/";
         }
@@ -49,6 +48,10 @@ public class LoginController {
         memberService.create(Member.of(loginUser.get()));
 
         Optional<Member> userProfile = memberService.findByUserKey(loginUser.get().getId());
+        if(userProfile.isEmpty()) {
+            return "redirect:/";
+        }
+
         List<Playlist> playlist = playlistService.getFindByUserId(PlaylistPagingDto.of(userProfile.get().getId(), 0L));
 
         model.addAttribute("loginUser", loginUser.get());

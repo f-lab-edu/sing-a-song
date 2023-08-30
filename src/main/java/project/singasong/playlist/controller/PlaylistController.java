@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,10 @@ public class PlaylistController {
     @GetMapping("/playlist")
     public String playlist(Model model, HttpServletRequest request, @RequestParam(defaultValue = "0") Long offset) {
         Long userId = getUserProfile(model, request);
+        if(userId == null) {
+            return "redirect:/";
+        }
+
         List<Playlist> playlist = playlistService.getFindByUserId(PlaylistPagingDto.of(userId, offset));
         model.addAttribute("playlist", playlist);
         model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
@@ -44,8 +49,7 @@ public class PlaylistController {
 
     @GetMapping("/playlist-add")
     public String playlistAdd(Model model, HttpServletRequest request) {
-        getUserProfile(model, request);
-        return "playlist-add";
+        return getUserProfile(model, request) == null ? "redirect:/" : "playlist-add";
     }
 
     @GetMapping("/playlist/{userId}")
@@ -88,8 +92,14 @@ public class PlaylistController {
     private Long getUserProfile(Model model, HttpServletRequest request) {
         String accessToken = (String) request.getSession().getAttribute("accessToken");
         ResponseEntity<NaverCallbackInfoDto> loginUser = naverApi.getUserProfile(accessToken, request.getSession());
+        if(!StringUtils.equals(loginUser.getBody().getMessage(), "success")) {
+            return null;
+        }
 
         Optional<Member> userProfile = memberService.findByUserKey(loginUser.getBody().getResponse().getId());
+        if(userProfile.isEmpty()) {
+            return null;
+        }
 
         model.addAttribute("loginUser", loginUser.getBody().getResponse());
         model.addAttribute("userId", userProfile.get().getId());
