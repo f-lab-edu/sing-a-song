@@ -2,9 +2,7 @@ package project.singasong.playlist.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.singasong.member.domain.Member;
 import project.singasong.member.service.MemberService;
 import project.singasong.oauth.naver.NaverOauthApi;
-import project.singasong.oauth.naver.dto.NaverCallbackInfoDto;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
@@ -35,7 +31,8 @@ public class PlaylistController {
 
     @GetMapping("/playlist")
     public String playlist(Model model, HttpServletRequest request, @RequestParam(defaultValue = "0") Long offset) {
-        Long userId = getUserProfile(model, request);
+        Long userId = (Long) request.getSession().getAttribute("userId");
+
         if(userId == null) {
             return "redirect:/";
         }
@@ -48,8 +45,8 @@ public class PlaylistController {
     }
 
     @GetMapping("/playlist-add")
-    public String playlistAdd(Model model, HttpServletRequest request) {
-        return getUserProfile(model, request) == null ? "redirect:/" : "playlist-add";
+    public String playlistAdd() {
+        return "playlist-add";
     }
 
     @GetMapping("/playlist/{userId}")
@@ -87,24 +84,6 @@ public class PlaylistController {
     @DeleteMapping("/playlist/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(playlistService.delete(id));
-    }
-
-    private Long getUserProfile(Model model, HttpServletRequest request) {
-        String accessToken = (String) request.getSession().getAttribute("accessToken");
-        ResponseEntity<NaverCallbackInfoDto> loginUser = naverApi.getUserProfile(accessToken, request.getSession());
-        if(!StringUtils.equals(loginUser.getBody().getMessage(), "success")) {
-            return null;
-        }
-
-        Optional<Member> userProfile = memberService.findByUserKey(loginUser.getBody().getResponse().getId());
-        if(userProfile.isEmpty()) {
-            return null;
-        }
-
-        model.addAttribute("loginUser", loginUser.getBody().getResponse());
-        model.addAttribute("userId", userProfile.get().getId());
-        
-        return userProfile.get().getId();
     }
 
 }

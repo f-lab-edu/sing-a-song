@@ -44,6 +44,11 @@
     #share {
       background-color: #FBFF7C;
     }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
     table {
       width: 94%;
     }
@@ -60,7 +65,7 @@
       <img src="/images/mic_icon.png" width="40px">
       <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
 
-      <p style="display: inline-block;" id="name">000님</p>
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
       <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
     </div>
 
@@ -91,13 +96,12 @@
       </tr>
     </table>
     <input type="button" id="more" value="더보기" onclick="javascript:more();">
+    <input type="hidden" id="userId" th:value="${session.userId}">
   </div>
 </div>
 <script type="text/javascript">
-  const name = "[[${loginUser.name}]]";
-  const userId = "[[${userId}]]";
+  const userId = $("#userId").val();
   let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
-  $("#name").text(name + "님");
 
   function add() {
     location.href = "/playlist-add";
