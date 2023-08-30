@@ -26,11 +26,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
 
         String accessToken = (String) request.getSession().getAttribute("accessToken");
-        getUserProfile(request, response);
-
         if (accessToken == null) {
             throw new IllegalStateException("다시 로그인 해주셔야 합니다.");
         }
+
+        getUserProfile(request, response);
         return true;
     }
 
