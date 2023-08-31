@@ -38,7 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String accessToken = (String) request.getSession().getAttribute("accessToken");
         ResponseEntity<NaverCallbackInfoDto> loginUser = naverApi.getUserProfile(accessToken, request.getSession());
 
-        if(StringUtils.equals(loginUser.getBody().getMessage(), "success")) {
+        if(!StringUtils.equals(loginUser.getBody().getMessage(), "success")) {
             response.sendRedirect("/");
         }
 
