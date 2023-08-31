@@ -36,19 +36,20 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private void getUserProfile(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String accessToken = (String) request.getSession().getAttribute("accessToken");
-        ResponseEntity<NaverCallbackInfoDto> loginUser = naverApi.getUserProfile(accessToken, request.getSession());
+        ResponseEntity<NaverCallbackInfoDto> naverCallbackInfo = naverApi.getUserProfile(accessToken, request.getSession());
+        NaverCallbackInfoDto loginUser = naverCallbackInfo.getBody();
 
-        if(!StringUtils.equals(loginUser.getBody().getMessage(), "success")) {
+        if(!StringUtils.equals(loginUser.getMessage(), "success")) {
             response.sendRedirect("/");
         }
 
-        Optional<Member> userProfile = memberService.findByUserKey(loginUser.getBody().getResponse().getId());
+        Optional<Member> userProfile = memberService.findByUserKey(loginUser.getResponse().getId());
         if(userProfile.isEmpty()) {
             response.sendRedirect("/");
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("loginUser", loginUser.getBody().getResponse());
+        session.setAttribute("loginUser", loginUser.getResponse());
         session.setAttribute("userId", userProfile.get().getId());
     }
 

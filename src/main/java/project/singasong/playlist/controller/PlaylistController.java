@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import project.singasong.member.service.MemberService;
-import project.singasong.oauth.naver.NaverOauthApi;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
@@ -25,9 +23,7 @@ import project.singasong.playlist.service.PlaylistService;
 @RequiredArgsConstructor
 public class PlaylistController {
 
-    private final NaverOauthApi naverApi;
     private final PlaylistService playlistService;
-    private final MemberService memberService;
 
     @GetMapping("/playlist")
     public String playlist(Model model, HttpServletRequest request, @RequestParam(defaultValue = "0") Long offset) {
