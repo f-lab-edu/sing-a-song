@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+<div style="text-align: center;">
+  <div style="margin: 50px 0 70px 0;">
+    <img src="images/mic_icon.png" width="100px">
+    <h1 style="display: inline-block; font-size: 60px;">sing-a-song</h1>
+  </div>
+  <div>
+    <a href="javascript:naverLogin();"><img src="images/naver_login_icon.png" style="width:300px;"></a>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+  function naverLogin() {
+    $.ajax({
+      url: "/login",
+      type: "POST",
+    }).done((res) => location.href = res);
+  }
+</script>
+</html>

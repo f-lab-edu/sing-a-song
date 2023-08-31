@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    .sub_title {
+      font-size: 20px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #add {
+      background-color: #E9B9FF;
+      float: right;
+      margin-right: 60px;
+      margin-bottom: 10px;
+    }
+    #more {
+      background-color: lightgray;
+      float: right;
+      margin-right: 60px;
+      margin-top: 10px;
+    }
+    #share {
+      background-color: #FBFF7C;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+    table {
+      width: 94%;
+    }
+    table, td, th {
+      border : 1px solid black;
+      border-collapse : collapse;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <h2 class="main_title">my-list</h2>
+      <p class="main_title">노래검색</p>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div style="text-align: left;">
+      <h2 class="sub_title">my-list</h2>
+      <p class="sub_title">좋아요 곡</p>
+    </div>
+
+    <input type="button" id="add" value="추가" onclick="javascript:add();">
+    <table id="playlistTable">
+      <tr>
+        <th style="width: 15%;">No</th>
+        <th style="width: 60%;">목록명</th>
+        <th style="width: 25%;">공유하기</th>
+      </tr>
+      <tr th:each="list, i : ${playlist}">
+        <td th:text="${i.index+1}">1</td>
+        <td th:text="${list.id}" hidden>1</td>
+        <td th:text="${list.title}" onclick="javascript:playlistDetail();">신나는</td>
+        <td><input type="button" id="share" value="공유하기" onclick="javascript:share();"></td>
+      </tr>
+    </table>
+    <input type="button" id="more" value="더보기" onclick="javascript:more();">
+    <input type="hidden" id="userId" th:value="${session.userId}">
+  </div>
+</div>
+<script type="text/javascript">
+  const userId = $("#userId").val();
+  let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
+
+  function add() {
+    location.href = "/playlist-add";
+  }
+
+  function more() {
+    $.ajax({
+      url: "/playlist/"+userId,
+      type: "GET",
+      data: { offset }
+    }).done((result) => {
+      $(result).each(function(){
+        $("#playlistTable").append(
+          $("<tr></tr>")
+            .append($("<td></td>").text(this.id))
+            .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
+            .append($("<td></td>").text(this.title))
+            .append($("<td></td>").append($("<input></input>").attr("id", "share").attr("type", "button").attr("value","공유하기")))
+        );
+        offset = this.id;
+      });
+    });
+  }
+
+  // TODO 플레이리스트 상세페이지 기능
+  function playlistDetail() {
+    alert("플레이리스트 상세페이지로 이동");
+  }
+
+  // TODO 공유하기 기능
+  function share() {
+    alert("공유하기");
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>

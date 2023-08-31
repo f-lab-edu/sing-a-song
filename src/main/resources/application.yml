@@ -1,8 +1,6 @@
 spring:
-  profiles:
-    include: secret
   config:
-    import: oauth-secret.yml
+    import: secret/application-secret.yml, secret/oauth-secret.yml
   thymeleaf:
     cache: false
     prefix: classpath:templates/

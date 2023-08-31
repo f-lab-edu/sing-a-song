@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<h1>login success!!</h1>
+<br>
+<p>name : <input type="text" id="name"></p>
+<p>gender : <input type="text" id="gender"></p>
+<p>age : <input type="text" id="age"></p>
+<script type="text/javascript">
+  const name = "[[${loginUser.name}]]";
+  const gender = "[[${loginUser.gender}]]";
+  const age = "[[${loginUser.age}]]";
+
+  document.getElementById("name").value = name;
+  document.getElementById("gender").value = gender;
+  document.getElementById("age").value = age;
+</script>
+</body>
+</html>

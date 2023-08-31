@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #save {
+      background-color: #E9B9FF;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <h2 class="main_title">my-list</h2>
+      <p class="main_title">노래검색</p>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div>
+      <p style="display: inline-block;"><b>목록명 : </b></p>
+      <input type="text" id="title" maxlength="50" style="width: 50%">
+      <input type="button" id="save" value="등록" onclick="javascript:save();">
+      <input type="hidden" id="userId" th:value="${session.userId}">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function save() {
+    const title = $("#title").val();
+    const userId = $("#userId").val();
+
+    if(title == '') {
+      alert("목록명을 입력해 주세요.");
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/playlist",
+      data: JSON.stringify({ title, userId }),
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Content-type","application/json");
+      },
+      success: () => {
+        location.href = "/playlist"
+      }
+    });
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>
