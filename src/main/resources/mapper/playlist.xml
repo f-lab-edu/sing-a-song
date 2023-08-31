@@ -10,7 +10,7 @@
         FROM playlist
         WHERE user_id = #{userId}
             AND id > #{offset}
-        ORDER BY id
+        ORDER BY id ASC
         LIMIT #{limit}
     </select>
 
