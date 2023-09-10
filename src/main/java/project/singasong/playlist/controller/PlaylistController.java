@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
@@ -45,11 +46,17 @@ public class PlaylistController {
         return "playlist-add";
     }
 
+    @GetMapping("/playlist-update/{playlistId}")
+    public String playlistUpdate(@PathVariable Long playlistId, Model model) {
+        model.addAttribute("playlistId", playlistId);
+        return "playlist-update";
+    }
+
     @GetMapping("/playlist/{userId}")
     public ResponseEntity getFindByUserId(Model model, @PathVariable Long userId, @RequestParam(defaultValue = "0") Long offset) {
         List<Playlist> playlist = playlistService.getFindByUserId(PlaylistPagingDto.of(userId, offset));
 
-        if(playlist.size() != 0) {
+        if(!playlist.isEmpty()) {
             model.addAttribute("playlist", playlist);
             model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
         }
@@ -68,7 +75,7 @@ public class PlaylistController {
     }
 
     @PatchMapping("/playlist/{id}")
-    public ResponseEntity update(@PathVariable Long id, UpdatePlaylistDto updateSongList) {
+    public @ResponseBody ResponseEntity update(@PathVariable Long id, @RequestBody UpdatePlaylistDto updateSongList) {
         Playlist playlist = Playlist.builder()
             .id(id)
             .title(updateSongList.getTitle())
@@ -78,7 +85,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/playlist/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(playlistService.delete(id));
     }
 

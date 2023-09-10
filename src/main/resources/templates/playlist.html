@@ -56,6 +56,10 @@
       border : 1px solid black;
       border-collapse : collapse;
     }
+    a {
+      text-decoration: none;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -72,7 +76,7 @@
     <div style="text-align: left;">
       <p class="main_title">all</p>
       <h2 class="main_title">my-list</h2>
-      <p class="main_title">노래검색</p>
+      <p class="main_title"><a href="javascript:songSearch();">노래검색</a></p>
       <p class="main_title">랭킹</p>
     </div>
 
@@ -91,7 +95,7 @@
       <tr th:each="list, i : ${playlist}">
         <td th:text="${i.index+1}">1</td>
         <td th:text="${list.id}" hidden>1</td>
-        <td th:text="${list.title}" onclick="javascript:playlistDetail();">신나는</td>
+        <td th:text="${list.title}" th:onclick="playlistDetail([[${list.id}]])">신나는</td>
         <td><input type="button" id="share" value="공유하기" onclick="javascript:share();"></td>
       </tr>
     </table>
@@ -118,7 +122,7 @@
           $("<tr></tr>")
             .append($("<td></td>").text(this.id))
             .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
-            .append($("<td></td>").text(this.title))
+            .append($("<td></td>").text(this.title).attr("onclick", "playlistDetail('"+this.id+"')"))
             .append($("<td></td>").append($("<input></input>").attr("id", "share").attr("type", "button").attr("value","공유하기")))
         );
         offset = this.id;
@@ -126,14 +130,17 @@
     });
   }
 
-  // TODO 플레이리스트 상세페이지 기능
-  function playlistDetail() {
-    alert("플레이리스트 상세페이지로 이동");
+  function playlistDetail(playlistId) {
+    location.href = "/playlist/song/"+playlistId;
   }
 
   // TODO 공유하기 기능
   function share() {
     alert("공유하기");
+  }
+
+  function songSearch() {
+    location.href = "/song";
   }
 
   function logout() {

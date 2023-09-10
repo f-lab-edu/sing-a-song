@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #more {
+      background-color: lightgray;
+      float: right;
+      margin-right: 60px;
+      margin-top: 10px;
+    }
+    #addSong {
+      background-color: orange;
+    }
+    table {
+      width: 94%;
+    }
+    table, td, th {
+      border : 1px solid black;
+      border-collapse : collapse;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+    #select {
+      background-color: #2994FF;
+    }
+    #searchConditionTable table, td, th {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <p class="main_title">my-list</p>
+      <h2 class="main_title">노래검색</h2>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div>
+      <table id="searchConditionTable">
+        <tr>
+          <td colspan="3" style="text-align: left;">
+            <input type="radio" name="brand" value="kumyoung" checked>금영
+            <input type="radio" name="brand" value="tj">tj
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <select id="searchCondition" style="width:85%;">
+              <option value="singer" selected>가수명</option>
+              <option value="title">제목</option>
+              <option value="no">번호</option>
+            </select>
+          </td>
+          <td><input type="text" id="searchWord" style="width:100%;"/></td>
+          <td><input type="button" id="select" value="검색" onclick="javascript:searchSong();"></td>
+        </tr>
+      </table>
+    </div>
+    <br><br>
+    <div>
+      <table id="songListTable">
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th>제목</th>
+          <th style="width: 15%;">가수</th>
+          <th style="width: 5%;">번호</th>
+          <th style="width: 25%;">추가</th>
+        </tr>
+      </table>
+    </div>
+
+    <input type="button" id="more" value="더보기" onclick="javascript:searchSong();">
+    <input type="hidden" id="userId" th:value="${session.userId}">
+  </div>
+</div>
+<script type="text/javascript">
+  const userId = $("#userId").val();
+  let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
+
+  function searchSong() {
+    const brand = $('input[name=brand]:checked').val();
+    const searchCondition = $("#searchCondition option:selected").val();
+    const searchWord = $("#searchWord").val();
+
+    if(searchWord == '') {
+      alert("검색어를 입력해 주세요.");
+      return;
+    }
+
+    $.ajax({
+      url: "/song/"+brand,
+      type: "GET",
+      data: { offset, searchCondition, searchWord },
+    }).done((result) => {
+      $(result).each(function(index){
+        $("#songListTable").append(
+            $("<tr></tr>")
+            .append($("<td></td>").text(index+1))
+            .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
+            .append($("<td></td>").text(this.title))
+            .append($("<td></td>").text(this.singer))
+            .append($("<td></td>").text(this.no))
+            .append($("<td></td>").append($("<input></input>").attr("id", "addSong").attr("type", "button").attr("value","추가")
+              .attr("onclick", "addSong('"+this.brand+"','"+this.id+"')")))
+        );
+        offset = this.id;
+      });
+    });
+  }
+
+  function addSong(brand, songId) {
+    location.href = "/song/"+brand+"/"+songId;
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>
