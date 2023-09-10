@@ -4,12 +4,12 @@
 
     <select id="findByPlaylistId" parameterType="project.singasong.playlistSong.dto.PlaylistSongPagingDto" resultType="project.singasong.playlistSong.dto.PlaylistSongPagingDto">
         SELECT
-            p.song_id,
-            p.playlist_id,
-            s.title,
-            s.singer,
-            s.song_no,
-            s.brand
+            p.song_id as song_id,
+            p.playlist_id as playlist_id,
+            s.title as title,
+            s.singer as singer,
+            s.song_no as song_no,
+            s.brand as brand
         FROM playlist_song p
         JOIN song s on p.song_id = s.id
         WHERE p.playlist_id = #{playlistId} AND song_id > #{offset}
@@ -26,7 +26,7 @@
             AND song_id = #{songId}
     </select>
 
-    <insert id="create" parameterType="project.singasong.playlistSong.domain.PlaylistSong">
+    <insert id="create" parameterType="project.singasong.playlistSong.domain.PlaylistSong" useGeneratedKeys="true" keyColumn="songId">
         INSERT INTO playlist_song(
             song_id,
             playlist_id

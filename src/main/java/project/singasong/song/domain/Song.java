@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.singasong.song.enums.BrandType;
 
 @Getter
 @Builder
@@ -17,7 +18,7 @@ public class Song {
     private String title;
     private String singer;
     @JsonProperty("no")
-    private String songNo;
-    private String brand;
+    private long songNo;
+    private BrandType brand;
 
 }

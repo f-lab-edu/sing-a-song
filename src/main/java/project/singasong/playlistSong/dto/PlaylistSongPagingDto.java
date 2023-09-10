@@ -21,7 +21,7 @@ public class PlaylistSongPagingDto {
     private Long playlistId;
     private String title;
     private String singer;
-    private Long songNo;
-    private String brand;
+    private long songNo;
+    private BrandType brand;
 
 }

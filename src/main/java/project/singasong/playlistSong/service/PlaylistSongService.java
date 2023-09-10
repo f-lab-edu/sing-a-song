@@ -18,13 +18,14 @@ public class PlaylistSongService {
         return playlistSongRepository.findByPlaylistId(playlistSongPagingDto);
     }
 
-    public int create(PlaylistSong playlistSong) {
+    public long create(PlaylistSong playlistSong) {
         Optional<PlaylistSong> findByPlaylistSong = playlistSongRepository.findByPlaylistIdAndSongId(playlistSong);
         if(!findByPlaylistSong.isEmpty()) {
-            return 0;
+            return findByPlaylistSong.get().getSongId();
         }
 
-        return playlistSongRepository.create(playlistSong);
+        playlistSongRepository.create(playlistSong);
+        return playlistSong.getSongId();
     }
 
     public int delete(Long playlistId, Long songId) {

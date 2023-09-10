@@ -12,6 +12,6 @@ import project.singasong.playlistSong.dto.PlaylistSongPagingDto;
 public interface PlaylistSongRepository {
     List<PlaylistSongPagingDto> findByPlaylistId(PlaylistSongPagingDto playlistSongPagingDto);
     Optional<PlaylistSong> findByPlaylistIdAndSongId(PlaylistSong playlistSong);
-    int create(PlaylistSong playlistSong);
+    long create(PlaylistSong playlistSong);
     int delete(Long playlistId, Long songId);
 }
