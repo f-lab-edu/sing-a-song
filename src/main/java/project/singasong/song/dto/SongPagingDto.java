@@ -2,6 +2,7 @@ package project.singasong.song.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.singasong.song.enums.BrandType;
 import project.singasong.song.enums.SearchConditionType;
 
 @Getter
@@ -12,12 +13,12 @@ public class SongPagingDto {
     private long offset;
 
     private Long id;
-    private String brand;
+    private BrandType brand;
     private String title;
     private String singer;
     private String songNo;
 
-    public static SongPagingDto of(String brand, SearchConditionType searchCondition, String searchWord, Long offset) {
+    public static SongPagingDto of(BrandType brand, SearchConditionType searchCondition, String searchWord, long offset) {
         switch (searchCondition) {
             case singer -> {
                 return SongPagingDto.builder()

@@ -13,10 +13,10 @@
         FROM song
         WHERE brand = #{brand}
         <if test="singer != null">
-            AND singer LIKE CONCAT('%',#{singer},'%')
+            AND UPPER(singer) LIKE CONCAT('%',UPPER(#{singer}),'%')
         </if>
         <if test="title != null">
-            AND title LIKE CONCAT('%',#{title},'%')
+            AND UPPER(title) LIKE CONCAT('%',UPPER(#{title}),'%')
         </if>
         <if test="songNo != null">
             AND songNo LIKE CONCAT('%',#{songNo},'%')

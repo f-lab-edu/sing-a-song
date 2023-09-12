@@ -11,7 +11,7 @@ public class PlaylistPagingDto {
     private long offset;
     private Long userId;
 
-    public static PlaylistPagingDto of(Long userId, Long offset) {
+    public static PlaylistPagingDto of(Long userId, long offset) {
         return PlaylistPagingDto.builder()
             .userId(userId)
             .offset(offset)

@@ -113,9 +113,8 @@
 
   function more() {
     $.ajax({
-      url: "/playlist/"+userId,
+      url: "/playlist/"+userId+"?offset="+offset,
       type: "GET",
-      data: { offset }
     }).done((result) => {
       $(result).each(function(){
         $("#playlistTable").append(
@@ -131,7 +130,7 @@
   }
 
   function playlistDetail(playlistId) {
-    location.href = "/playlist/song/"+playlistId;
+    location.href = "/playlist-song/"+playlistId;
   }
 
   // TODO 공유하기 기능
