@@ -20,8 +20,8 @@ public class PlaylistSongService {
 
     public long create(PlaylistSong playlistSong) {
         Optional<PlaylistSong> findByPlaylistSong = playlistSongRepository.findByPlaylistIdAndSongId(playlistSong);
-        if(!findByPlaylistSong.isEmpty()) {
-            return findByPlaylistSong.get().getSongId();
+        if(findByPlaylistSong.isPresent()) {
+            return findByPlaylistSong.orElse(playlistSong).getSongId();
         }
 
         playlistSongRepository.create(playlistSong);
