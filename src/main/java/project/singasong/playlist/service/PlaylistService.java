@@ -12,23 +12,27 @@ import project.singasong.playlist.repository.PlaylistRepository;
 @RequiredArgsConstructor
 public class PlaylistService {
 
-    private final PlaylistRepository repository;
+    private final PlaylistRepository playlistRepository;
 
-    public List<Playlist> getFindByUserId(PlaylistPagingDto playlist) {
-        List<Playlist> playlists = repository.getFindByUserId(playlist);
+    public Playlist findById(Long id) {
+        return playlistRepository.findById(id);
+    }
+
+    public List<Playlist> findByUserId(PlaylistPagingDto playlist) {
+        List<Playlist> playlists = playlistRepository.findByUserId(playlist);
         return playlists != null ? playlists : Collections.emptyList();
     }
 
-    public int create(Playlist playlist) {
-        return repository.create(playlist);
+    public long create(Playlist playlist) {
+        return playlistRepository.create(playlist);
     }
 
     public int update(Playlist playlist) {
-        return repository.update(playlist);
+        return playlistRepository.update(playlist);
     }
 
     public int delete(Long id) {
-        return repository.delete(id);
+        return playlistRepository.delete(id);
     }
 
 }

@@ -10,8 +10,9 @@ import project.singasong.playlist.dto.PlaylistPagingDto;
 @Repository
 public interface PlaylistRepository {
 
-    List<Playlist> getFindByUserId(PlaylistPagingDto playlist);
-    int create(Playlist playlist);
+    Playlist findById(Long id);
+    List<Playlist> findByUserId(PlaylistPagingDto playlist);
+    long create(Playlist playlist);
     int update(Playlist playlist);
     int delete(Long id);
 

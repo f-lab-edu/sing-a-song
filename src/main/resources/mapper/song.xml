@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.singasong.song.repository.SongRepository">
+
+    <select id="findBySong" parameterType="project.singasong.song.dto.SongPagingDto" resultType="project.singasong.song.domain.Song">
+        SELECT
+            id,
+            title,
+            singer,
+            song_no,
+            brand,
+            update_date
+        FROM song
+        WHERE brand = #{brand}
+        <if test="singer != null">
+            AND UPPER(singer) LIKE CONCAT('%',UPPER(#{singer}),'%')
+        </if>
+        <if test="title != null">
+            AND UPPER(title) LIKE CONCAT('%',UPPER(#{title}),'%')
+        </if>
+        <if test="songNo != null">
+            AND songNo LIKE CONCAT('%',#{songNo},'%')
+        </if>
+        AND id > #{offset}
+        ORDER BY id ASC
+        LIMIT #{limit}
+    </select>
+
+</mapper>
