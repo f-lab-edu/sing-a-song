@@ -4,11 +4,11 @@
 
     <select id="findByPlaylistId" parameterType="project.singasong.playlistSong.dto.PlaylistSongPagingDto" resultType="project.singasong.playlistSong.dto.PlaylistSongPagingDto">
         SELECT
-            p.song_id as song_id,
-            p.playlist_id as playlist_id,
+            p.song_id as songId,
+            p.playlist_id as playlistId,
             s.title as title,
             s.singer as singer,
-            s.song_no as song_no,
+            s.song_no as songNo,
             s.brand as brand
         FROM playlist_song p
         JOIN song s on p.song_id = s.id

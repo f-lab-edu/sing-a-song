@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import project.singasong.common.customAnnotation.CheckOwner;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
@@ -46,13 +47,9 @@ public class PlaylistController {
         return "playlist-add";
     }
 
+    @CheckOwner
     @GetMapping("/playlist-update/{playlistId}")
-    public String playlistUpdate(@PathVariable Long playlistId, HttpServletRequest request,Model model) {
-        Long userId = (Long) request.getSession().getAttribute("userId");
-        if(!userId.equals(playlistService.findById(playlistId).getUserId())) {
-            return "playlist";
-        }
-
+    public String playlistUpdate(@PathVariable Long playlistId, Model model) {
         model.addAttribute("playlistId", playlistId);
         return "playlist-update";
     }
@@ -79,13 +76,9 @@ public class PlaylistController {
         return ResponseEntity.ok().body(playlistService.create(playlist));
     }
 
+    @CheckOwner
     @PatchMapping("/playlist/{id}")
-    public @ResponseBody ResponseEntity update(@PathVariable Long id, @RequestBody UpdatePlaylistDto updateSongList, HttpServletRequest request) {
-        Long userId = (Long) request.getSession().getAttribute("userId");
-        if(!userId.equals(playlistService.findById(id).getUserId())) {
-            return ResponseEntity.ok().build();
-        }
-
+    public @ResponseBody ResponseEntity update(@PathVariable Long id, @RequestBody UpdatePlaylistDto updateSongList) {
         Playlist playlist = Playlist.builder()
             .id(id)
             .title(updateSongList.getTitle())
@@ -94,13 +87,9 @@ public class PlaylistController {
         return ResponseEntity.ok().body(playlistService.update(playlist));
     }
 
+    @CheckOwner
     @DeleteMapping("/playlist/{id}")
-    public @ResponseBody ResponseEntity delete(@PathVariable Long id, HttpServletRequest request) {
-        Long userId = (Long) request.getSession().getAttribute("userId");
-        if(!userId.equals(playlistService.findById(id).getUserId())) {
-            return ResponseEntity.ok().build();
-        }
-
+    public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(playlistService.delete(id));
     }
 
