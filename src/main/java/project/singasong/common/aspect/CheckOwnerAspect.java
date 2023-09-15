@@ -26,6 +26,9 @@ public class CheckOwnerAspect {
     public void checkOwner(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         Long playlistId = (Long) args[0];
+        if(playlistId == null) {
+            throw new IllegalStateException("플레이리스트 ID값은 NULL일 수 없습니다.");
+        }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         if(request != null) {
