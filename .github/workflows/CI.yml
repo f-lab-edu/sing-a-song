@@ -18,7 +18,13 @@ jobs:
         distribution: 'temurin'
     - name: Run chmod to make gradlew executable
       run: chmod +x gradlew
-    - name: Build with Gradle
+    - name: Build with Gradle Root Batch
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+        build-root-directory: ./batch-api
+    - name: Build with Gradle Root Core
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: build
+        build-root-directory: ./sing-a-song-api
