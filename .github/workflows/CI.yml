@@ -22,9 +22,9 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-        build-root-directory: ./batch-api
+        build-root-directory: /batch-api
     - name: Build with Gradle Root Core
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-        build-root-directory: ./sing-a-song-api
+        build-root-directory: /sing-a-song-api
