@@ -3,7 +3,7 @@ package project.singasong.song.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.singasong.song.domain.Song;
+import project.common.domain.Song;
 import project.singasong.song.dto.SongPagingDto;
 import project.singasong.song.repository.SongRepository;
 

@@ -2,8 +2,8 @@ package project.batch.song.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.batch.common.domain.Song;
 import project.batch.song.repository.SongRepository;
+import project.common.domain.Song;
 
 @Service
 @RequiredArgsConstructor

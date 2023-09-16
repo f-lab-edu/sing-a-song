@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="project.batch.song.repository.SongRepository">
 
-    <select id="findBySongId" parameterType="project.batch.common.domain.Song" resultType="project.batch.common.domain.Song">
+    <select id="findBySongId" parameterType="project.common.domain.Song" resultType="project.common.domain.Song">
         SELECT
             id,
             title,
@@ -15,7 +15,7 @@
             AND song_no = #{no}
     </select>
 
-    <insert id="create" parameterType="project.batch.common.domain.Song">
+    <insert id="create" parameterType="project.common.domain.Song">
         INSERT INTO SONG (
             title,
             singer,

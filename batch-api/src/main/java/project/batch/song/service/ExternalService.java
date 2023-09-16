@@ -13,8 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import project.batch.common.domain.Song;
-import project.batch.common.enums.BrandType;
+import project.common.domain.Song;
+import project.common.enums.BrandType;
 
 @Slf4j
 @Service

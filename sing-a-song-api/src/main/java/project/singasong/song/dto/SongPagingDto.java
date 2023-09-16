@@ -2,7 +2,7 @@ package project.singasong.song.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import project.singasong.song.enums.BrandType;
+import project.common.enums.BrandType;
 import project.singasong.song.enums.SearchConditionType;
 
 @Getter

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="project.singasong.song.repository.SongRepository">
 
-    <select id="findBySong" parameterType="project.singasong.song.dto.SongPagingDto" resultType="project.singasong.song.domain.Song">
+    <select id="findBySong" parameterType="project.singasong.song.dto.SongPagingDto" resultType="project.common.domain.Song">
         SELECT
             id,
             title,

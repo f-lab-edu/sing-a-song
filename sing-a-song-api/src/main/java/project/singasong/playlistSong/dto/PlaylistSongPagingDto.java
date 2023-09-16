@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.singasong.song.enums.BrandType;
-import project.singasong.song.enums.SearchConditionType;
+import project.common.enums.BrandType;
 
 @Getter
 @Builder

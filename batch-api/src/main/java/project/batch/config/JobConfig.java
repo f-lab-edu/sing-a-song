@@ -15,10 +15,10 @@ import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
-import project.batch.common.domain.Song;
-import project.batch.common.enums.BrandType;
 import project.batch.song.service.ExternalService;
 import project.batch.song.service.SongService;
+import project.common.domain.Song;
+import project.common.enums.BrandType;
 
 @Configuration
 @RequiredArgsConstructor

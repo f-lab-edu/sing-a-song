@@ -3,7 +3,7 @@ package project.batch.song.repository;
 import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import project.batch.common.domain.Song;
+import project.common.domain.Song;
 
 @Mapper
 @Repository
