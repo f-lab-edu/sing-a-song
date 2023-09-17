@@ -1,40 +1,78 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.2'
-	id 'io.spring.dependency-management' version '1.1.2'
-}
-
-group = 'project'
-version = '0.0.1-SNAPSHOT'
-
-java {
-	sourceCompatibility = '17'
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+buildscript {
+	ext {
+		springBootVersion = '3.1.3'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:3.1.3"
+		classpath "io.spring.gradle:dependency-management-plugin:1.1.3.RELEASE"
 	}
 }
 
-repositories {
-	mavenCentral()
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	group = 'project'
+	version = '0.0.1-SNAPSHOT'
+
+	sourceCompatibility = '17'
+
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		implementation "org.springframework.boot:spring-boot-configuration-processor"
+		implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+		implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+		implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+		implementation 'org.apache.commons:commons-lang3:3.12.0'
+		implementation 'org.projectlombok:lombok:1.18.26'
+		runtimeOnly 'com.mysql:mysql-connector-j'
+		annotationProcessor 'org.projectlombok:lombok'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	}
+
+	test {
+		useJUnitPlatform()
+	}
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
-	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
-	implementation 'org.apache.commons:commons-lang3:3.12.0'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+project(':batch-api') {
+	bootJar { enabled = true }
+	jar { enabled = true }
+
+	dependencies {
+		implementation project(':common-api')
+		implementation 'org.springframework.boot:spring-boot-starter'
+		implementation 'org.springframework.boot:spring-boot-starter-batch'
+		implementation 'org.springframework:spring-web'
+	}
+
+	bootJar{
+		archivesBaseName = 'customBatch'
+		archiveFileName = 'customBatch.jar'
+	}
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+project(':sing-a-song-api') {
+	bootJar { enabled = true }
+	jar { enabled = true }
+
+	dependencies {
+		implementation project(':common-api')
+		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-validation'
+		implementation 'org.springframework.boot:spring-boot-starter-aop'
+	}
+}
+
+project(':common-api') {
+	bootJar { enabled = true }
+	jar { enabled = false }
 }
