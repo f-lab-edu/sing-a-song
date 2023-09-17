@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import project.singasong.common.customAnnotation.CheckOwner;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
+import project.singasong.playlist.dto.PlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
 import project.singasong.playlist.dto.UpdatePlaylistDto;
 import project.singasong.playlist.service.PlaylistService;
+import project.singasong.song.enums.SearchConditionType;
 
 @Controller
 @RequiredArgsConstructor
@@ -57,6 +59,32 @@ public class PlaylistController {
     @GetMapping("/playlist/{userId}")
     public ResponseEntity findByUserId(Model model, @PathVariable Long userId, @RequestParam(defaultValue = "0") long offset) {
         List<Playlist> playlist = playlistService.findByUserId(PlaylistPagingDto.of(userId, offset));
+
+        if(!playlist.isEmpty()) {
+            model.addAttribute("playlist", playlist);
+            model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+        }
+
+        return ResponseEntity.ok().body(playlist);
+    }
+
+    @GetMapping("/playlist/all")
+    public String findByAll(Model model, @RequestParam(defaultValue = "0") long offset) {
+        List<PlaylistDto> playlist = playlistService.findByAll(PlaylistPagingDto.allOf(offset));
+
+        if(!playlist.isEmpty()) {
+            model.addAttribute("playlist", playlist);
+            model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+        }
+
+        return "all";
+    }
+
+    @GetMapping("/playlist/searchAll")
+    public ResponseEntity findByUserId(Model model, @RequestParam(defaultValue = "0") long offset,
+        @RequestParam SearchConditionType searchCondition, @RequestParam String searchWord) {
+
+        List<PlaylistDto> playlist = playlistService.findByAll(PlaylistPagingDto.searchAllOf(searchCondition, searchWord, offset));
 
         if(!playlist.isEmpty()) {
             model.addAttribute("playlist", playlist);

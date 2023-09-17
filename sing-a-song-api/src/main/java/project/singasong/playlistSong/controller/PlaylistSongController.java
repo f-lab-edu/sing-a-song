@@ -27,6 +27,12 @@ public class PlaylistSongController {
         return "playlist-song";
     }
 
+    @GetMapping("/playlist-song/all/{playlistId}")
+    public String playlistSongAll(@PathVariable Long playlistId, Model model) {
+        model.addAttribute("playlistSongList", findByPlaylistIdAndLike(playlistId, 0, model));
+        return "playlist-song-all";
+    }
+
     @GetMapping("/playlist/song/{playlistId}")
     public @ResponseBody ResponseEntity findByPlaylistId(@PathVariable Long playlistId, @RequestParam long offset, Model model) {
         return ResponseEntity.ok().body(findPlaylistSong(playlistId, offset, model));
@@ -54,6 +60,23 @@ public class PlaylistSongController {
             .build();
 
         List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistId(playlistSongPagingDto);
+
+        model.addAttribute("playlistId", playlistId);
+
+        if(!playlistSongList.isEmpty()) {
+            model.addAttribute("offset", playlistSongList.get(playlistSongList.size()-1).getSongId());
+        }
+
+        return playlistSongList;
+    }
+
+    private List<PlaylistSongPagingDto> findByPlaylistIdAndLike(Long playlistId, long offset, Model model) {
+        PlaylistSongPagingDto playlistSongPagingDto = PlaylistSongPagingDto.builder()
+            .playlistId(playlistId)
+            .offset(offset)
+            .build();
+
+        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistIdAndLike(playlistSongPagingDto);
 
         model.addAttribute("playlistId", playlistId);
 

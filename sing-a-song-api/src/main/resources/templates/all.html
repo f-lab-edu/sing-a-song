@@ -15,11 +15,6 @@
       display: inline-block;
       padding: 0 50px;
     }
-    .sub_title {
-      font-size: 20px;
-      display: inline-block;
-      padding: 0 50px;
-    }
     input[type="button"] {
       background-color: lightgrey;
       padding: 0.5rem 1rem;
@@ -28,12 +23,6 @@
     }
     #logout {
       background-color: lightgrey;
-    }
-    #add {
-      background-color: #E9B9FF;
-      float: right;
-      margin-right: 60px;
-      margin-bottom: 10px;
     }
     #more {
       background-color: lightgray;
@@ -60,6 +49,9 @@
       text-decoration: none;
       color: black;
     }
+    #searchConditionTable table, td, th {
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -74,32 +66,43 @@
     </div>
 
     <div style="text-align: left;">
-      <p class="main_title"><a href="javascript:getPlaylistAll();">all</a></p>
-      <h2 class="main_title">my-list</h2>
-      <p class="main_title"><a href="javascript:songSearch();">노래검색</a></p>
+      <h2 class="main_title">all</h2>
+      <p class="main_title">my-list</p>
+      <p class="main_title">노래검색</p>
       <p class="main_title">랭킹</p>
     </div>
 
-    <div style="text-align: left;">
-      <h2 class="sub_title">my-list</h2>
-      <p class="sub_title"><a href="javascript:likeList();">좋아요 곡</a></p>
+    <div>
+      <table id="searchConditionTable">
+        <tr>
+          <td>
+            <select id="searchCondition" style="width:85%;">
+              <option value="title" selected>목록명</option>
+              <option value="userId">생성자</option>
+            </select>
+          </td>
+          <td><input type="text" id="searchWord" style="width:100%;"/></td>
+          <td><input type="button" id="select" value="검색" onclick="javascript:searchPlaylist();"></td>
+        </tr>
+      </table>
     </div>
 
-    <input type="button" id="add" value="추가" onclick="javascript:add();">
     <table id="playlistTable">
       <tr>
         <th style="width: 15%;">No</th>
-        <th style="width: 60%;">목록명</th>
-        <th style="width: 25%;">공유하기</th>
+        <th>목록명</th>
+        <th style="width: 10%;">생성자</th>
+        <th style="width: 20%;">공유하기</th>
       </tr>
       <tr th:each="list, i : ${playlist}">
         <td th:text="${i.index+1}">1</td>
         <td th:text="${list.id}" hidden>1</td>
         <td th:text="${list.title}" th:onclick="playlistDetail([[${list.id}]])">신나는</td>
+        <td th:text="${list.name}">생성자</td>
         <td><input type="button" id="share" value="공유하기" onclick="javascript:share();"></td>
       </tr>
     </table>
-    <input type="button" id="more" value="더보기" onclick="javascript:more();">
+    <input type="button" id="more" value="더보기" onclick="javascript:searchPlaylist();">
     <input type="hidden" id="userId" th:value="${session.userId}">
   </div>
 </div>
@@ -107,22 +110,23 @@
   const userId = $("#userId").val();
   let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
 
-  function add() {
-    location.href = "/playlist-add";
-  }
+  function searchPlaylist() {
+    const searchCondition = $("#searchCondition option:selected").val();
+    const searchWord = $("#searchWord").val();
 
-  function more() {
     $.ajax({
-      url: "/playlist/"+userId+"?offset="+offset,
+      url: "/playlist/searchAll?offset="+offset,
       type: "GET",
+      data: { searchCondition, searchWord },
     }).done((result) => {
-      $(result).each(function(){
+      $(result).each(() => {
         $("#playlistTable").append(
-          $("<tr></tr>")
-            .append($("<td></td>").text(this.id))
-            .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
-            .append($("<td></td>").text(this.title).attr("onclick", "playlistDetail('"+this.id+"')"))
-            .append($("<td></td>").append($("<input></input>").attr("id", "share").attr("type", "button").attr("value","공유하기")))
+            $("<tr></tr>")
+              .append($("<td></td>").text(this.id))
+              .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
+              .append($("<td></td>").text(this.title).attr("onclick", "playlistDetail('"+this.id+"')"))
+              .append($("<td></td>").text(this.name))
+              .append($("<td></td>").append($("<input></input>").attr("id", "share").attr("type", "button").attr("value","공유하기")))
         );
         offset = this.id;
       });
@@ -130,24 +134,12 @@
   }
 
   function playlistDetail(playlistId) {
-    location.href = "/playlist-song/"+playlistId;
+    location.href = "/playlist-song/all/"+playlistId;
   }
 
   // TODO 공유하기 기능
   function share() {
     alert("공유하기");
-  }
-
-  function songSearch() {
-    location.href = "/song";
-  }
-
-  function getPlaylistAll() {
-    location.href = "/playlist/all";
-  }
-
-  function likeList() {
-    location.href = "/like-list/"+userId;
   }
 
   function logout() {

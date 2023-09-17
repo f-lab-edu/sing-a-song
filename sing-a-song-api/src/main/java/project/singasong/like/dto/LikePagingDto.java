@@ -1,4 +1,4 @@
-package project.singasong.playlistSong.dto;
+package project.singasong.like.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,17 +11,16 @@ import project.common.enums.BrandType;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlaylistSongPagingDto {
+public class LikePagingDto {
 
     private final int limit = 10;
     private long offset;
 
+    private Long userId;
     private Long songId;
-    private Long playlistId;
     private String title;
     private String singer;
     private long songNo;
     private BrandType brand;
-    private int likeCnt;
 
 }

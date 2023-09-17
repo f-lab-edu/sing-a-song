@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.singasong.like.repository.LikeRepository">
+
+    <select id="findByUserId" parameterType="project.singasong.like.dto.LikePagingDto" resultType="project.singasong.like.dto.LikePagingDto">
+        SELECT
+            l.user_id AS userId,
+            l.song_id AS songId,
+            s.title AS title,
+            s.singer AS singer,
+            s.song_no AS songNo,
+            s.brand AS brand
+        FROM likes l
+        JOIN song s ON l.song_id = s.id
+        WHERE l.user_id = #{userId}
+            AND l.song_id > #{offset}
+        ORDER BY l.song_id ASC
+        LIMIT #{limit}
+    </select>
+
+    <insert id="like" parameterType="project.singasong.member.domain.Member">
+        INSERT INTO likes(
+            user_id,
+            song_id
+        ) VALUES (
+            #{userId},
+            #{songId}
+        )
+    </insert>
+
+    <delete id="unLike" parameterType="project.singasong.member.domain.Member">
+        DELETE FROM likes
+        WHERE user_id = #{userId} AND song_id = #{songId}
+    </delete>
+
+</mapper>

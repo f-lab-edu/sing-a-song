@@ -23,6 +23,25 @@
         LIMIT #{limit}
     </select>
 
+    <select id="findByAll" parameterType="project.singasong.playlist.dto.PlaylistPagingDto" resultType="project.singasong.playlist.dto.PlaylistDto">
+        SELECT
+            p.id AS id,
+            p.user_id AS userId,
+            p.title AS title,
+            m.name AS name
+        FROM playlist p
+        JOIN member m ON p.user_id = m.id
+        WHERE p.id > #{offset}
+        <if test="title != null">
+            AND UPPER(p.title) LIKE CONCAT('%',UPPER(#{title}),'%')
+        </if>
+        <if test="name != null">
+            AND UPPER(m.name) LIKE CONCAT('%',UPPER(#{name}),'%')
+        </if>
+        ORDER BY id ASC
+        LIMIT #{limit}
+    </select>
+
     <insert id="create" parameterType="project.singasong.playlist.domain.Playlist" useGeneratedKeys="true" keyColumn="id">
         INSERT INTO playlist(
             id,
