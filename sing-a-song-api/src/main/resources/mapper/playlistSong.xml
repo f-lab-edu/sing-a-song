@@ -34,7 +34,7 @@
             s.singer AS singer,
             s.song_no AS songNo,
             s.brand AS brand,
-            li.likeCnt AS likeCnt
+            li.likeCnt AS isLike
         FROM playlist_song ps
         JOIN song s ON ps.song_id = s.id
         JOIN playlist p ON ps.playlist_id = p.id

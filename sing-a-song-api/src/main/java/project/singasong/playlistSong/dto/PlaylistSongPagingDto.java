@@ -22,6 +22,6 @@ public class PlaylistSongPagingDto {
     private String singer;
     private long songNo;
     private BrandType brand;
-    private int likeCnt;
+    private boolean isLike;
 
 }
