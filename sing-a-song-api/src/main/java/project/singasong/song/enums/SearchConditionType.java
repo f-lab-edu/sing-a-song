@@ -1,8 +1,8 @@
 package project.singasong.song.enums;
 
 public enum SearchConditionType {
-    singer,
-    title,
-    no,
-    name,
+    SINGER,
+    TITLE,
+    NO,
+    NAME,
 }

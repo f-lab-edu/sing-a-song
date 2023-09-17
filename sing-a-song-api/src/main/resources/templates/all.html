@@ -77,8 +77,8 @@
         <tr>
           <td>
             <select id="searchCondition" style="width:85%;">
-              <option value="title" selected>목록명</option>
-              <option value="userId">생성자</option>
+              <option value="TITLE" selected>목록명</option>
+              <option value="NAME">생성자</option>
             </select>
           </td>
           <td><input type="text" id="searchWord" style="width:100%;"/></td>
@@ -115,9 +115,8 @@
     const searchWord = $("#searchWord").val();
 
     $.ajax({
-      url: "/playlist/searchAll?offset="+offset,
+      url: "/playlist/searchAll?offset="+offset+"&searchCondition="+searchCondition+"&searchWord="+searchWord,
       type: "GET",
-      data: { searchCondition, searchWord },
     }).done((result) => {
       $(result).each(() => {
         $("#playlistTable").append(

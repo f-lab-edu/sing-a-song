@@ -20,21 +20,21 @@ public class SongPagingDto {
 
     public static SongPagingDto of(BrandType brand, SearchConditionType searchCondition, String searchWord, long offset) {
         switch (searchCondition) {
-            case singer -> {
+            case SINGER -> {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .singer(searchWord)
                     .offset(offset)
                     .build();
             }
-            case title -> {
+            case TITLE -> {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .title(searchWord)
                     .offset(offset)
                     .build();
             }
-            case no -> {
+            case NO -> {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .songNo(searchWord)

@@ -2,7 +2,6 @@ package project.singasong.playlist.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import project.singasong.song.dto.SongPagingDto;
 import project.singasong.song.enums.SearchConditionType;
 
 @Getter
@@ -30,13 +29,13 @@ public class PlaylistPagingDto {
 
     public static PlaylistPagingDto searchAllOf(SearchConditionType searchCondition, String searchWord, long offset) {
         switch (searchCondition) {
-            case title -> {
+            case TITLE -> {
                 return PlaylistPagingDto.builder()
                     .title(searchWord)
                     .offset(offset)
                     .build();
             }
-            case name -> {
+            case NAME -> {
                 return PlaylistPagingDto.builder()
                     .name(searchWord)
                     .offset(offset)
