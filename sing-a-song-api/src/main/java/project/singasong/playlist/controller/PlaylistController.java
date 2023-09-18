@@ -77,7 +77,7 @@ public class PlaylistController {
             model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
         }
 
-        return "all";
+        return "playlist-all";
     }
 
     @GetMapping("/playlist/searchAll")
