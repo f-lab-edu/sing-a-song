@@ -1,5 +1,6 @@
 package project.singasong.playlistSong.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,12 @@ public class PlaylistSongController {
     public String playlistSong(@PathVariable Long playlistId, Model model) {
         model.addAttribute("playlistSongList", findPlaylistSong(playlistId, 0, model));
         return "playlist-song";
+    }
+
+    @GetMapping("/playlist-song/all/{playlistId}")
+    public String playlistSongAll(@PathVariable Long playlistId, HttpServletRequest request, Model model) {
+        model.addAttribute("playlistSongList", findByPlaylistIdAndLike(playlistId, 0, request, model));
+        return "playlist-song-all";
     }
 
     @GetMapping("/playlist/song/{playlistId}")
@@ -54,6 +61,26 @@ public class PlaylistSongController {
             .build();
 
         List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistId(playlistSongPagingDto);
+
+        model.addAttribute("playlistId", playlistId);
+
+        if(!playlistSongList.isEmpty()) {
+            model.addAttribute("offset", playlistSongList.get(playlistSongList.size()-1).getSongId());
+        }
+
+        return playlistSongList;
+    }
+
+    private List<PlaylistSongPagingDto> findByPlaylistIdAndLike(Long playlistId, long offset,
+        HttpServletRequest request, Model model) {
+
+        PlaylistSongPagingDto playlistSongPagingDto = PlaylistSongPagingDto.builder()
+            .playlistId(playlistId)
+            .userId((Long) request.getSession().getAttribute("userId"))
+            .offset(offset)
+            .build();
+
+        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistIdAndLike(playlistSongPagingDto);
 
         model.addAttribute("playlistId", playlistId);
 

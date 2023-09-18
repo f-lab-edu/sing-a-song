@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import project.singasong.playlist.domain.Playlist;
+import project.singasong.playlist.dto.PlaylistDto;
 import project.singasong.playlist.dto.PlaylistPagingDto;
 
 @Mapper
@@ -11,7 +12,8 @@ import project.singasong.playlist.dto.PlaylistPagingDto;
 public interface PlaylistRepository {
 
     Playlist findById(Long id);
-    List<Playlist> findByUserId(PlaylistPagingDto playlist);
+    List<Playlist> findByUserId(PlaylistPagingDto playlistPagingDto);
+    List<PlaylistDto> findByAll(PlaylistPagingDto playlistPagingDto);
     long create(Playlist playlist);
     int update(Playlist playlist);
     int delete(Long id);

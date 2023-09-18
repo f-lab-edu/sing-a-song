@@ -18,6 +18,10 @@ public class PlaylistSongService {
         return playlistSongRepository.findByPlaylistId(playlistSongPagingDto);
     }
 
+    public List<PlaylistSongPagingDto> findByPlaylistIdAndLike(PlaylistSongPagingDto playlistSongPagingDto) {
+        return playlistSongRepository.findByPlaylistIdAndLike(playlistSongPagingDto);
+    }
+
     public long create(PlaylistSong playlistSong) {
         Optional<PlaylistSong> findByPlaylistSong = playlistSongRepository.findByPlaylistIdAndSongId(playlistSong);
         if(findByPlaylistSong.isPresent()) {
