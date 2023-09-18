@@ -1,5 +1,6 @@
 package project.singasong.playlistSong.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +29,8 @@ public class PlaylistSongController {
     }
 
     @GetMapping("/playlist-song/all/{playlistId}")
-    public String playlistSongAll(@PathVariable Long playlistId, Model model) {
-        model.addAttribute("playlistSongList", findByPlaylistIdAndLike(playlistId, 0, model));
+    public String playlistSongAll(@PathVariable Long playlistId, HttpServletRequest request, Model model) {
+        model.addAttribute("playlistSongList", findByPlaylistIdAndLike(playlistId, 0, request, model));
         return "playlist-song-all";
     }
 
@@ -70,9 +71,12 @@ public class PlaylistSongController {
         return playlistSongList;
     }
 
-    private List<PlaylistSongPagingDto> findByPlaylistIdAndLike(Long playlistId, long offset, Model model) {
+    private List<PlaylistSongPagingDto> findByPlaylistIdAndLike(Long playlistId, long offset,
+        HttpServletRequest request, Model model) {
+
         PlaylistSongPagingDto playlistSongPagingDto = PlaylistSongPagingDto.builder()
             .playlistId(playlistId)
+            .userId((Long) request.getSession().getAttribute("userId"))
             .offset(offset)
             .build();
 

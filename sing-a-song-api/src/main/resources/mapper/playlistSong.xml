@@ -45,8 +45,9 @@
                 JOIN member m ON l.user_id = m.id
                 JOIN song s ON l.song_id = s.id
                 GROUP BY l.song_id, l.user_id
-            ) li ON ps.song_id = li.song_id AND p.user_id = li.user_id
-        WHERE ps.playlist_id = #{playlistId} AND ps.song_id > #{offset}
+            ) li ON ps.song_id = li.song_id
+        WHERE ps.playlist_id = #{playlistId} AND li.userId = #{userId}
+            AND ps.song_id > #{offset}
         ORDER BY ps.song_id ASC
         LIMIT #{limit}
     </select>
