@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import project.singasong.common.customAnnotation.CheckOwner;
+import project.singasong.oauth.naver.properties.KakaoSecretProperty;
 import project.singasong.playlist.domain.Playlist;
 import project.singasong.playlist.dto.CreatePlaylistDto;
 import project.singasong.playlist.dto.PlaylistDto;
@@ -28,6 +29,7 @@ import project.singasong.song.enums.SearchConditionType;
 public class PlaylistController {
 
     private final PlaylistService playlistService;
+    private final KakaoSecretProperty kakaoSecretProperty;
 
     @GetMapping("/playlist")
     public String playlist(Model model, HttpServletRequest request, @RequestParam(defaultValue = "0") long offset) {
@@ -38,8 +40,13 @@ public class PlaylistController {
         }
 
         List<Playlist> playlist = playlistService.findByUserId(PlaylistPagingDto.of(userId, offset));
-        model.addAttribute("playlist", playlist);
-        model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+
+        if(!playlist.isEmpty()) {
+            model.addAttribute("playlist", playlist);
+            model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+            model.addAttribute("javascriptKey", kakaoSecretProperty.getJavascriptKey());
+            model.addAttribute("templateId", kakaoSecretProperty.getTemplateId());
+        }
 
         return "playlist";
     }
@@ -75,6 +82,8 @@ public class PlaylistController {
         if(!playlist.isEmpty()) {
             model.addAttribute("playlist", playlist);
             model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+            model.addAttribute("javascriptKey", kakaoSecretProperty.getJavascriptKey());
+            model.addAttribute("templateId", kakaoSecretProperty.getTemplateId());
         }
 
         return "playlist-all";
