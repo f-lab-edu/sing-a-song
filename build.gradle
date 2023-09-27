@@ -73,6 +73,6 @@ project(':sing-a-song-api') {
 }
 
 project(':common-api') {
-	bootJar { enabled = false }
-	jar { enabled = true }
+	bootJar { enabled = true }
+	jar { enabled = false }
 }
