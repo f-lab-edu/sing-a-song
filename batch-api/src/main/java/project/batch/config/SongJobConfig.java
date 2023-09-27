@@ -22,7 +22,7 @@ import project.common.enums.BrandType;
 
 @Configuration
 @RequiredArgsConstructor
-public class JobConfig extends BatchAutoConfiguration {
+public class SongJobConfig extends BatchAutoConfiguration {
 
     private final ExternalService externalService;
     private final SongService songService;
@@ -32,7 +32,7 @@ public class JobConfig extends BatchAutoConfiguration {
         PlatformTransactionManager transactionManager) {
         return new JobBuilder("syncSongJob", jobRepository)
             .start(getKumyoungSongChunk(jobRepository, transactionManager))
-            .start(getTjSongChunk(jobRepository, transactionManager))
+            .next(getTjSongChunk(jobRepository, transactionManager))
             .incrementer(new RunIdIncrementer())
             .build();
     }

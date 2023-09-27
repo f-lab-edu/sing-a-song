@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.batch.statistics.repository.StatisticsRepository">
+
+    <select id="findByClassification" parameterType="project.common.domain.ClassStatistics" resultType="project.common.domain.ClassStatistics">
+        SELECT
+            l.song_id AS songId,
+            s.title AS title,
+            s.singer AS singer,
+            s.song_no AS songNo,
+            s.brand AS brand,
+            m.gender AS gender,
+            m.age_group AS ageGroup,
+            COUNT(1) AS likes
+        FROM likes l
+        JOIN song s ON l.song_id = s.id
+        JOIN member m ON l.user_id = m.id
+        WHERE s.brand = #{brand}
+        GROUP BY l.song_id, m.gender, m.age_group
+        ORDER BY likes DESC
+        LIMIT 30
+    </select>
+
+    <select id="findByLike" parameterType="project.common.domain.LikeStatistics" resultType="project.common.domain.LikeStatistics">
+        SELECT
+            l.song_id AS songId,
+            s.title AS title,
+            s.singer AS singer,
+            s.song_no AS songNo,
+            s.brand AS brand,
+            COUNT(1) AS likes
+        FROM likes l
+        JOIN song s ON l.song_id = s.id
+        WHERE s.brand = #{brand}
+        GROUP BY l.song_id
+        ORDER BY likes DESC
+        LIMIT 30
+    </select>
+
+    <insert id="classCreate" parameterType="project.common.domain.ClassStatistics">
+        INSERT INTO class_statistics (
+            title,
+            singer,
+            song_no,
+            brand,
+            gender,
+            age_group,
+            insert_date
+        ) VALUES (
+            #{title},
+            #{singer},
+            #{songNo},
+            #{brand},
+            #{gender},
+            #{ageGroup},
+            NOW()
+        )
+    </insert>
+
+    <insert id="likeCreate" parameterType="project.common.domain.LikeStatistics">
+        INSERT INTO like_statistics (
+            title,
+            singer,
+            song_no,
+            brand,
+            likes,
+            insert_date
+        ) VALUES (
+            #{title},
+            #{singer},
+            #{songNo},
+            #{brand},
+            #{likes},
+            NOW()
+        )
+    </insert>
+
+</mapper>
