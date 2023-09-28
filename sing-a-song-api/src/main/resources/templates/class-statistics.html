@@ -81,6 +81,12 @@
     <table>
       <tr>
         <td style="text-align: left;">
+          <input type="radio" name="brand" value="KUMYOUNG" checked>금영
+          <input type="radio" name="brand" value="TJ">tj
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">
           <input type="radio" name="gender" value="M" checked>남
           <input type="radio" name="gender" value="F">여
         </td>
@@ -126,11 +132,12 @@
   }
 
   function getClassStatistics() {
+    const brand = $('input[name=brand]:checked').val();
     const gender = $('input[name=gender]:checked').val();
     const ageGroup = $('input[name=ageGroup]:checked').val();
 
     $.ajax({
-      url: "/statistics/class/"+gender+"/"+ageGroup,
+      url: "/statistics/class/"+brand+"/"+gender+"/"+ageGroup,
       type: "GET",
     }).done((result) => {
       $("#statisticsTable tr:not(:first)").remove();

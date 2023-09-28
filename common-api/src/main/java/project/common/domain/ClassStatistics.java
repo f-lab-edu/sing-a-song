@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.common.enums.BrandType;
+import project.common.enums.Gender;
 
 @Getter
 @Builder
@@ -20,7 +21,7 @@ public class ClassStatistics {
     private String singer;
     private long songNo;
     private BrandType brand;
-    private String gender;
+    private Gender gender;
     private String ageGroup;
     private LocalDateTime insertDate;
     private int likes;

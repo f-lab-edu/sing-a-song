@@ -13,7 +13,8 @@
             age_group,
             insert_date
         FROM class_statistics
-        WHERE gender = #{gender}
+        WHERE brand = #{brand}
+            AND gender = #{gender}
             AND age_group = #{ageGroup}
             AND DATE_FORMAT(insert_date, '%Y%m%d') = #{formatDate}
     </select>
@@ -28,7 +29,8 @@
             likes,
             insert_date
         FROM like_statistics
-        WHERE DATE_FORMAT(insert_date, '%Y%m%d') = #{formatDate}
+        WHERE brand = #{brand}
+            AND DATE_FORMAT(insert_date, '%Y%m%d') = #{formatDate}
     </select>
 
 </mapper>

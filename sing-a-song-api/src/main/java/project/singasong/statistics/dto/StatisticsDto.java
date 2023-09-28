@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import project.common.enums.BrandType;
-import project.singasong.song.enums.SearchConditionType;
+import project.common.enums.Gender;
 
 @Getter
 @Builder
@@ -16,7 +16,7 @@ public class StatisticsDto {
     private long songNo;
     private BrandType brand;
     private int likes;
-    private String gender;
+    private Gender gender;
     private String ageGroup;
     private LocalDateTime insertDate;
     private String formatDate;

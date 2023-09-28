@@ -1,7 +1,5 @@
 package project.singasong.statistics.service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

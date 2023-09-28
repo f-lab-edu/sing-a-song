@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import project.common.domain.ClassStatistics;
 import project.common.domain.LikeStatistics;
 import project.common.enums.BrandType;
+import project.common.enums.Gender;
 import project.singasong.statistics.dto.StatisticsDto;
 import project.singasong.statistics.service.StatisticsService;
 
@@ -35,9 +36,10 @@ public class StatisticsController {
         return "/like-statistics";
     }
 
-    @GetMapping("/class/{gender}/{ageGroup}")
-    public @ResponseBody ResponseEntity getClassStatistics(@PathVariable String gender, @PathVariable String ageGroup, Model model) {
+    @GetMapping("/class/{brand}/{gender}/{ageGroup}")
+    public @ResponseBody ResponseEntity getClassStatistics(@PathVariable BrandType brand, @PathVariable Gender gender, @PathVariable String ageGroup, Model model) {
         StatisticsDto classStatistics = StatisticsDto.builder()
+            .brand(brand)
             .gender(gender)
             .ageGroup(ageGroup)
             .formatDate(setDayOfWeek())
