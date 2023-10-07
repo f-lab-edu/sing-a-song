@@ -51,7 +51,7 @@ public class ExternalService {
         String releaseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         releaseDate = manualReleaseDate.isEmpty() ? releaseDate : manualReleaseDate;
 
-        log.info("ReleaseDate is {}", releaseDate);
+        log.info("{} ReleaseDate is {}", brand, releaseDate);
 
         return "https://api.manana.kr/karaoke/release/" + releaseDate + "/" + brand + ".json";
     }
