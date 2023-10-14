@@ -34,20 +34,19 @@
             s.singer AS singer,
             s.song_no AS songNo,
             s.brand AS brand,
-            li.likeCnt AS isLike
+            IFNULL(li.is_like,0) AS isLike
         FROM playlist_song ps
         JOIN song s ON ps.song_id = s.id
         JOIN playlist p ON ps.playlist_id = p.id
         LEFT JOIN (
                 SELECT
-                    l.user_id, l.song_id, COUNT(1) AS likeCnt
+                    l.user_id, l.song_id, COUNT(1) AS is_like
                 FROM likes l
                 JOIN member m ON l.user_id = m.id
                 JOIN song s ON l.song_id = s.id
                 GROUP BY l.song_id, l.user_id
-            ) li ON ps.song_id = li.song_id
-        WHERE ps.playlist_id = #{playlistId} AND li.userId = #{userId}
-            AND ps.song_id > #{offset}
+            ) li ON ps.song_id = li.song_id AND li.user_id = #{userId}
+        WHERE ps.playlist_id = #{playlistId} AND ps.song_id > #{offset}
         ORDER BY ps.song_id ASC
         LIMIT #{limit}
     </select>

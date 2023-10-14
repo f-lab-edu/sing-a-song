@@ -86,8 +86,8 @@
         <td th:text="${list.songNo}">번호</td>
         <td th:text="${list.brand}">업체</td>
         <td>
-          <span id="like" th:if="${list.likeCnt == 0}" th:onclick="likeSong([[${list.songId}]])">♡</span>
-          <span id="unlike" th:if="${list.likeCnt != 0}" th:onclick="unLikeSong([[${list.songId}]])">♥</span>
+          <span id="like" th:if="${list.isLike == false}" th:onclick="likeSong([[${list.songId}]])">♡</span>
+          <span id="unlike" th:if="${list.isLike == true}" th:onclick="likeSong([[${list.songId}]])">♥</span>
         </td>
         <td th:text="${list.songId}" hidden></td>
       </tr>
@@ -105,13 +105,6 @@
     $.ajax({
       url: "/like/"+userId+"/"+songId,
       type: "POST",
-    }).done(() => location.href = "/playlist-song/all/"+playlistId);
-  }
-
-  function unLikeSong(songId) {
-    $.ajax({
-      url: "/like/"+userId+"/"+songId,
-      type: "DELETE",
     }).done(() => location.href = "/playlist-song/all/"+playlistId);
   }
 
