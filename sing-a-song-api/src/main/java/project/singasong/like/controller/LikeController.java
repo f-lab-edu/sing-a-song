@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import project.singasong.common.dto.ResponseDto;
+import project.singasong.common.enums.ResultMessage;
 import project.singasong.like.domain.Like;
 import project.singasong.like.dto.LikePagingDto;
 import project.singasong.like.service.LikeService;
@@ -39,7 +41,11 @@ public class LikeController {
             .songId(songId)
             .build();
 
-        return ResponseEntity.ok().body(likeService.like(like));
+        ResponseDto responseDto = ResponseDto.builder()
+            .message(ResultMessage.SUCCESS)
+            .result(likeService.like(like))
+            .build();
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @DeleteMapping("/like/{userId}/{songId}")
