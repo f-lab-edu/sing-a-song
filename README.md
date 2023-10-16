@@ -48,3 +48,4 @@
 <a href="https://j-jeongeun.github.io/posts/social_login_kakao">소셜 로그인2 (카카오 편) + 구글</a><br>
 <a href="https://j-jeongeun.github.io/posts/http_message">http 라이브러리</a><br>
 <a href="https://j-jeongeun.github.io/posts/batch">배치 만들기</a>
+<a href="https://j-jeongeun.github.io/posts/redis">Redis</a>
