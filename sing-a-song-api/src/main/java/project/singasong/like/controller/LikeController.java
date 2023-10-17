@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import project.singasong.common.dto.ResponseDto;
 import project.singasong.like.domain.Like;
 import project.singasong.like.dto.LikePagingDto;
 import project.singasong.like.service.LikeService;
@@ -38,7 +39,7 @@ public class LikeController {
             .songId(songId)
             .build();
 
-        return ResponseEntity.ok().body(likeService.like(like));
+        return ResponseDto.success(likeService.like(like));
     }
 
     private List<LikePagingDto> findByUserId(Long userId, long offset, Model model) {

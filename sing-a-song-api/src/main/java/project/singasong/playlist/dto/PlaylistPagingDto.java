@@ -41,9 +41,7 @@ public class PlaylistPagingDto {
                     .offset(offset)
                     .build();
             }
-            default -> {
-                return PlaylistPagingDto.builder().build();
-            }
+            default -> throw new IllegalStateException("검색 조건이 누락되었습니다.");
         }
     }
 
