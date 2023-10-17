@@ -35,17 +35,13 @@ public class LikeController {
     }
 
     @PostMapping("/like/{userId}/{songId}")
-    public @ResponseBody ResponseEntity like(@PathVariable Long userId, @PathVariable Long songId) {
+    public @ResponseBody ResponseDto like(@PathVariable Long userId, @PathVariable Long songId) {
         Like like = Like.builder()
             .userId(userId)
             .songId(songId)
             .build();
 
-        ResponseDto responseDto = ResponseDto.builder()
-            .message(ResultMessage.SUCCESS)
-            .result(likeService.like(like))
-            .build();
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseDto.success(likeService.like(like));
     }
 
     @DeleteMapping("/like/{userId}/{songId}")

@@ -16,4 +16,18 @@ public class ResponseDto<T> {
     private ResultMessage message;
     private T result;
 
+    public static <T> ResponseDto success(T result) {
+        return ResponseDto.builder()
+            .message(ResultMessage.SUCCESS)
+            .result(result)
+            .build();
+    }
+
+    public static <T> ResponseDto fail(T result) {
+        return ResponseDto.builder()
+            .message(ResultMessage.FAIL)
+            .result(result)
+            .build();
+    }
+
 }
