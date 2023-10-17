@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import project.singasong.common.enums.ResultMessage;
 
 @Getter
@@ -16,18 +17,13 @@ public class ResponseDto<T> {
     private ResultMessage message;
     private T result;
 
-    public static <T> ResponseDto success(T result) {
-        return ResponseDto.builder()
-            .message(ResultMessage.SUCCESS)
-            .result(result)
-            .build();
-    }
-
-    public static <T> ResponseDto fail(T result) {
-        return ResponseDto.builder()
-            .message(ResultMessage.FAIL)
-            .result(result)
-            .build();
+    public static <T> ResponseEntity success(T result) {
+        return ResponseEntity.ok().body(
+            ResponseDto.builder()
+                .message(ResultMessage.SUCCESS)
+                .result(result)
+                .build()
+        );
     }
 
 }

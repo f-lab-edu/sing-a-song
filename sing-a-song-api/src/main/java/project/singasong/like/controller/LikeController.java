@@ -35,7 +35,7 @@ public class LikeController {
     }
 
     @PostMapping("/like/{userId}/{songId}")
-    public @ResponseBody ResponseDto like(@PathVariable Long userId, @PathVariable Long songId) {
+    public @ResponseBody ResponseEntity like(@PathVariable Long userId, @PathVariable Long songId) {
         Like like = Like.builder()
             .userId(userId)
             .songId(songId)
