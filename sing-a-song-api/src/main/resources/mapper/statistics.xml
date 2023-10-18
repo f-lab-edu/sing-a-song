@@ -16,7 +16,7 @@
         WHERE brand = #{brand}
             AND gender = #{gender}
             AND age_group = #{ageGroup}
-            AND DATE_FORMAT(insert_date, '%Y%m%d') = #{formatDate}
+            AND insert_date = (SELECT MAX(insert_date) FROM class_statistics)
     </select>
 
     <select id="findByLikeStatistics" parameterType="project.singasong.statistics.dto.StatisticsDto" resultType="project.common.domain.LikeStatistics">
@@ -30,7 +30,7 @@
             insert_date
         FROM like_statistics
         WHERE brand = #{brand}
-            AND DATE_FORMAT(insert_date, '%Y%m%d') = #{formatDate}
+            AND insert_date = (SELECT MAX(insert_date) FROM like_statistics)
     </select>
 
 </mapper>

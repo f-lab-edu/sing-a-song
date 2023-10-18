@@ -21,18 +21,18 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @GetMapping("/like-list/{userId}")
+    @GetMapping("/like/{userId}")
     public String likeList(@PathVariable Long userId, @RequestParam(defaultValue = "0") long offset, Model model) {
         findByUserId(userId, offset, model);
         return "like-list";
     }
 
-    @GetMapping("/like/{userId}")
+    @GetMapping("/api/like/{userId}")
     public ResponseEntity findByAll(@PathVariable Long userId, @RequestParam(defaultValue = "0") long offset, Model model) {
         return ResponseEntity.ok().body(findByUserId(userId, offset, model));
     }
 
-    @PostMapping("/like/{userId}/{songId}")
+    @PostMapping("/api/like/{userId}/{songId}")
     public @ResponseBody ResponseEntity like(@PathVariable Long userId, @PathVariable Long songId) {
         Like like = Like.builder()
             .userId(userId)

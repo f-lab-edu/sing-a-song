@@ -102,7 +102,7 @@
 
   function searchLikelist() {
     $.ajax({
-      url: "/like/"+userId+"?offset="+offset,
+      url: "/api/like/"+userId+"?offset="+offset,
       type: "GET",
     }).done((result) => {
       $(result).each((index, data) => {

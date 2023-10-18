@@ -112,7 +112,7 @@
 
   function likeSong(songId, index, isLike) {
     $.ajax({
-      url: "/like/"+userId+"/"+songId,
+      url: "/api/like/"+userId+"/"+songId,
       type: "POST",
     }).done(() => {
       const like = $("#like"+index).val();
@@ -135,7 +135,7 @@
 
   function more() {
     $.ajax({
-      url: "/playlist/song/"+playlistId+"?offset="+offset,
+      url: "/api/playlist/song/"+playlistId+"?offset="+offset,
       type: "GET",
     }).done((result) => {
       $(result).each(function(index){

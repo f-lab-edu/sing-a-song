@@ -9,7 +9,7 @@ import project.singasong.song.enums.SearchConditionType;
 @Builder
 public class SongPagingDto {
 
-    private final int limit = 10;
+    private int limit = 10;
     private long offset;
 
     private Long id;

@@ -13,7 +13,7 @@ import project.common.enums.BrandType;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaylistSongPagingDto {
 
-    private final int limit = 10;
+    private int limit = 10;
     private long offset;
 
     private Long songId;

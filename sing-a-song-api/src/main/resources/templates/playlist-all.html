@@ -116,7 +116,7 @@
     const searchWord = $("#searchWord").val();
 
     $.ajax({
-      url: "/playlist/searchAll?offset="+offset+"&searchCondition="+searchCondition+"&searchWord="+searchWord,
+      url: "/api/playlist/searchAll?offset="+offset+"&searchCondition="+searchCondition+"&searchWord="+searchWord,
       type: "GET",
     }).done((result) => {
       $(result).each(() => {
@@ -135,7 +135,7 @@
   }
 
   function playlistDetail(playlistId) {
-    location.href = "/playlist-song/all/"+playlistId;
+    location.href = "/playlist/song/all/"+playlistId;
   }
 
   Kakao.init("[[${javascriptKey}]]");
@@ -143,7 +143,7 @@
     Kakao.Share.sendCustom({
       templateId: Number("[[${templateId}]]"),
       templateArgs: {
-        'callbackUrl': 'http://localhost:8080/playlist-song/'+playlistId,
+        'callbackUrl': 'http://localhost:8080/playlist/song/'+playlistId,
       }
     });
   }

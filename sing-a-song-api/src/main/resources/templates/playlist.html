@@ -114,7 +114,7 @@
 
   function more() {
     $.ajax({
-      url: "/playlist/"+userId+"?offset="+offset,
+      url: "/api/playlist/"+userId+"?offset="+offset,
       type: "GET",
     }).done((result) => {
       $(result).each(function(){
@@ -132,7 +132,7 @@
   }
 
   function playlistDetail(playlistId) {
-    location.href = "/playlist-song/"+playlistId;
+    location.href = "/playlist/song/"+playlistId;
   }
 
   Kakao.init("[[${javascriptKey}]]");
@@ -140,7 +140,7 @@
     Kakao.Share.sendCustom({
       templateId: Number("[[${templateId}]]"),
       templateArgs: {
-        'callbackUrl': 'http://localhost:8080/playlist-song/'+playlistId,
+        'callbackUrl': 'http://localhost:8080/playlist/song/'+playlistId,
       }
     });
   }
@@ -154,7 +154,7 @@
   }
 
   function likeList() {
-    location.href = "/like-list/"+userId;
+    location.href = "/like/"+userId;
   }
 
   function getStatistics() {

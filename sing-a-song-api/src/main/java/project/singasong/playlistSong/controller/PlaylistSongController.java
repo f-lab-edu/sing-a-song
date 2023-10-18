@@ -22,24 +22,24 @@ public class PlaylistSongController {
 
     private final PlaylistSongService playlistSongService;
 
-    @GetMapping("/playlist-song/{playlistId}")
+    @GetMapping("/playlist/song/{playlistId}")
     public String playlistSong(@PathVariable Long playlistId, Model model) {
         model.addAttribute("playlistSongList", findPlaylistSong(playlistId, 0, model));
         return "playlist-song";
     }
 
-    @GetMapping("/playlist-song/all/{playlistId}")
+    @GetMapping("/playlist/song/all/{playlistId}")
     public String playlistSongAll(@PathVariable Long playlistId, HttpServletRequest request, Model model) {
         model.addAttribute("playlistSongList", findByPlaylistIdAndLike(playlistId, 0, request, model));
         return "playlist-song-all";
     }
 
-    @GetMapping("/playlist/song/{playlistId}")
+    @GetMapping("/api/playlist/song/{playlistId}")
     public @ResponseBody ResponseEntity findByPlaylistId(@PathVariable Long playlistId, @RequestParam long offset, Model model) {
         return ResponseEntity.ok().body(findPlaylistSong(playlistId, offset, model));
     }
 
-    @PostMapping("/playlist/song/{playlistId}/{songId}")
+    @PostMapping("/api/playlist/song/{playlistId}/{songId}")
     public @ResponseBody ResponseEntity create(@PathVariable Long playlistId, @PathVariable Long songId) {
         PlaylistSong playlistSong = PlaylistSong.builder()
             .playlistId(playlistId)
@@ -49,7 +49,7 @@ public class PlaylistSongController {
         return ResponseEntity.ok().body(playlistSongService.create(playlistSong));
     }
 
-    @DeleteMapping("/playlist/song/{playlistId}/{songId}")
+    @DeleteMapping("/api/playlist/song/{playlistId}/{songId}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long playlistId, @PathVariable Long songId) {
         return ResponseEntity.ok().body(playlistSongService.delete(playlistId, songId));
     }

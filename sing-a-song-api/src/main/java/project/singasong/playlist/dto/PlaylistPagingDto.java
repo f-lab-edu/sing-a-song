@@ -8,7 +8,7 @@ import project.singasong.song.enums.SearchConditionType;
 @Builder
 public class PlaylistPagingDto {
 
-    private final int limit = 5;
+    private int limit = 5;
     private long offset;
     private Long userId;
     private String title;

@@ -124,7 +124,7 @@
     }
 
     $.ajax({
-      url: "/song/"+brand+"?offset="+offset,
+      url: "/api/song/"+brand+"?offset="+offset,
       type: "GET",
       data: { searchCondition, searchWord },
     }).done((result) => {

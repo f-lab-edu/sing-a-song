@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import project.common.domain.Song;
@@ -18,17 +17,16 @@ import project.singasong.song.service.SongService;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/song")
 public class SongController {
 
     private final SongService songService;
 
-    @GetMapping
+    @GetMapping("/song")
     public String song() {
         return "/song";
     }
 
-    @GetMapping("/{brand}/{songId}")
+    @GetMapping("/song/{brand}/{songId}")
     public String songAdd(@PathVariable BrandType brand, @PathVariable Long songId, Model model) {
         model.addAttribute("brand", brand);
         model.addAttribute("no", songId);
@@ -36,7 +34,7 @@ public class SongController {
         return "/song-add";
     }
 
-    @GetMapping("/{brand}")
+    @GetMapping("/api/song/{brand}")
     public @ResponseBody ResponseEntity findBySong(@PathVariable BrandType brand, @RequestParam SearchConditionType searchCondition,
             @RequestParam String searchWord, @RequestParam(defaultValue = "0") long offset, Model model) {
 

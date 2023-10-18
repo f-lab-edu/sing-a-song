@@ -63,18 +63,6 @@ public class PlaylistController {
         return "playlist-update";
     }
 
-    @GetMapping("/playlist/{userId}")
-    public ResponseEntity findByUserId(Model model, @PathVariable Long userId, @RequestParam(defaultValue = "0") long offset) {
-        List<Playlist> playlist = playlistService.findByUserId(PlaylistPagingDto.of(userId, offset));
-
-        if(!playlist.isEmpty()) {
-            model.addAttribute("playlist", playlist);
-            model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
-        }
-
-        return ResponseEntity.ok().body(playlist);
-    }
-
     @GetMapping("/playlist/all")
     public String findByAll(Model model, @RequestParam(defaultValue = "0") long offset) {
         List<PlaylistDto> playlist = playlistService.findByAll(PlaylistPagingDto.allOf(offset));
@@ -89,7 +77,19 @@ public class PlaylistController {
         return "playlist-all";
     }
 
-    @GetMapping("/playlist/searchAll")
+    @GetMapping("/api/playlist/{userId}")
+    public ResponseEntity findByUserId(Model model, @PathVariable Long userId, @RequestParam(defaultValue = "0") long offset) {
+        List<Playlist> playlist = playlistService.findByUserId(PlaylistPagingDto.of(userId, offset));
+
+        if(!playlist.isEmpty()) {
+            model.addAttribute("playlist", playlist);
+            model.addAttribute("offset", playlist.get(playlist.size()-1).getId());
+        }
+
+        return ResponseEntity.ok().body(playlist);
+    }
+
+    @GetMapping("/api/playlist/searchAll")
     public ResponseEntity findByUserId(Model model, @RequestParam(defaultValue = "0") long offset,
         @RequestParam SearchConditionType searchCondition, @RequestParam String searchWord) {
 
@@ -103,7 +103,7 @@ public class PlaylistController {
         return ResponseEntity.ok().body(playlist);
     }
 
-    @PostMapping("/playlist")
+    @PostMapping("/api/playlist")
     public ResponseEntity create(@RequestBody CreatePlaylistDto createPlaylist) {
         Playlist playlist = Playlist.builder()
             .userId(createPlaylist.getUserId())
@@ -114,7 +114,7 @@ public class PlaylistController {
     }
 
     @CheckOwner
-    @PatchMapping("/playlist/{id}")
+    @PatchMapping("/api/playlist/{id}")
     public @ResponseBody ResponseEntity update(@PathVariable Long id, @RequestBody UpdatePlaylistDto updateSongList) {
         Playlist playlist = Playlist.builder()
             .id(id)
@@ -125,7 +125,7 @@ public class PlaylistController {
     }
 
     @CheckOwner
-    @DeleteMapping("/playlist/{id}")
+    @DeleteMapping("/api/playlist/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(playlistService.delete(id));
     }

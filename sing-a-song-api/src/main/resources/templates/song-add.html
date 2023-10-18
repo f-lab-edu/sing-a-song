@@ -69,7 +69,7 @@
 
   function getMyList() {
     $.ajax({
-      url: "/playlist/"+userId,
+      url: "/api/playlist/"+userId,
       type: "GET"
     }).done((result) => {
       $(result).each(function () {
@@ -90,7 +90,7 @@
 
     $.ajax({
       type: "POST",
-      url: "/playlist/song/"+playlistId+"/"+songId,
+      url: "/api/playlist/song/"+playlistId+"/"+songId,
       beforeSend: function (xhr) {
         xhr.setRequestHeader("Content-type","application/json");
       },

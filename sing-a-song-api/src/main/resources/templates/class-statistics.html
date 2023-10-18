@@ -111,7 +111,6 @@
         <th style="width: 10%;">가수</th>
         <th style="width: 10%;">번호</th>
         <th style="width: 10%;">업체</th>
-        <th style="width: 10%;">집계수</th>
       </tr>
       <tr th:each="list, i : ${statisticsList}">
         <td th:text="${i.index+1}">1</td>
@@ -120,7 +119,6 @@
         <td th:text="${list.singer}">가수</td>
         <td th:text="${list.songNo}">번호</td>
         <td th:text="${list.brand}">업체</td>
-        <td th:text="${list.likes}">집계수</td>
       </tr>
     </table>
     <p id="dateStandard">해당 통계는 지난 주 일요일 기준으로 집계된 순위입니다.</p>
@@ -137,7 +135,7 @@
     const ageGroup = $('input[name=ageGroup]:checked').val();
 
     $.ajax({
-      url: "/statistics/class/"+brand+"/"+gender+"/"+ageGroup,
+      url: "/api/statistics/class/"+brand+"/"+gender+"/"+ageGroup,
       type: "GET",
     }).done((result) => {
       $("#statisticsTable tr:not(:first)").remove();
@@ -150,7 +148,6 @@
             .append($("<td></td>").text(this.singer))
             .append($("<td></td>").text(this.songNo))
             .append($("<td></td>").text(this.brand))
-            .append($("<td></td>").text(this.likes))
         );
       });
     });

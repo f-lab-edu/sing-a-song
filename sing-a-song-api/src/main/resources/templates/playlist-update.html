@@ -72,7 +72,7 @@
     }
 
     $.ajax({
-      url: "/playlist/"+playlistId,
+      url: "/api/playlist/"+playlistId,
       type: "PATCH",
       data: JSON.stringify({ title }),
       beforeSend: function (xhr) {
