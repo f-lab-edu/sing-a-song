@@ -23,10 +23,10 @@ jobs:
       with:
         gradle-version: 8.2.1
         arguments: build
-        build-root-directory: ./batch-api
+        build-root-directory: ./batch
     - name: Build with Gradle Root Core
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         gradle-version: 8.2.1
         arguments: build
-        build-root-directory: ./sing-a-song-api
+        build-root-directory: ./api

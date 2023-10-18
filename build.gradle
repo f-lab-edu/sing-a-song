@@ -42,12 +42,12 @@ subprojects {
 	}
 }
 
-project(':batch-api') {
+project(':batch') {
 	bootJar { enabled = true }
 	jar { enabled = true }
 
 	dependencies {
-		implementation project(':common-api')
+		implementation project(':common')
 		implementation 'org.springframework.boot:spring-boot-starter'
 		implementation 'org.springframework.boot:spring-boot-starter-batch'
 		implementation 'org.springframework:spring-web'
@@ -59,12 +59,12 @@ project(':batch-api') {
 	}
 }
 
-project(':sing-a-song-api') {
+project(':api') {
 	bootJar { enabled = true }
 	jar { enabled = true }
 
 	dependencies {
-		implementation project(':common-api')
+		implementation project(':common')
 		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -73,7 +73,7 @@ project(':sing-a-song-api') {
 	}
 }
 
-project(':common-api') {
+project(':common') {
 	bootJar { enabled = true }
 	jar { enabled = false }
 }
