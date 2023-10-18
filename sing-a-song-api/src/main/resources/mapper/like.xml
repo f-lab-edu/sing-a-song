@@ -18,7 +18,15 @@
         LIMIT #{limit}
     </select>
 
-    <insert id="like" parameterType="project.singasong.member.domain.Member">
+    <select id="findByUserIdAndSongId" parameterType="project.singasong.like.domain.Like" resultType="project.singasong.like.domain.Like">
+        SELECT
+            user_id,
+            song_id
+        FROM likes
+        WHERE user_id = #{userId} AND song_id = #{songId}
+    </select>
+
+    <insert id="like" parameterType="project.singasong.like.domain.Like">
         INSERT INTO likes(
             user_id,
             song_id
@@ -28,7 +36,7 @@
         )
     </insert>
 
-    <delete id="unLike" parameterType="project.singasong.member.domain.Member">
+    <delete id="unLike" parameterType="project.singasong.like.domain.Like">
         DELETE FROM likes
         WHERE user_id = #{userId} AND song_id = #{songId}
     </delete>

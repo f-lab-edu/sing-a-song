@@ -15,4 +15,11 @@ public class Like {
     private Long userId;
     private Long songId;
 
+    public static Like of(Like like) {
+        return Like.builder()
+            .songId(like.getSongId())
+            .userId(like.getUserId())
+            .build();
+    }
+
 }
