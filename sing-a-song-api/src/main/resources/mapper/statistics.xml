@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.singasong.statistics.repository.StatisticsRepository">
+
+    <select id="findByClassStatistics" parameterType="project.singasong.statistics.dto.StatisticsDto" resultType="project.common.domain.ClassStatistics">
+        SELECT
+            id,
+            title,
+            singer,
+            song_no,
+            brand,
+            gender,
+            age_group,
+            insert_date
+        FROM class_statistics
+        WHERE brand = #{brand}
+            AND gender = #{gender}
+            AND age_group = #{ageGroup}
+            AND insert_date = (SELECT MAX(insert_date) FROM class_statistics)
+    </select>
+
+    <select id="findByLikeStatistics" parameterType="project.singasong.statistics.dto.StatisticsDto" resultType="project.common.domain.LikeStatistics">
+        SELECT
+            id,
+            title,
+            singer,
+            song_no,
+            brand,
+            likes,
+            insert_date
+        FROM like_statistics
+        WHERE brand = #{brand}
+            AND insert_date = (SELECT MAX(insert_date) FROM like_statistics)
+    </select>
+
+</mapper>

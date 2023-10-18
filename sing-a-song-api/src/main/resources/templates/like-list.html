@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    .sub_title {
+      font-size: 20px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #more {
+      background-color: lightgray;
+      float: right;
+      margin-right: 60px;
+      margin-top: 10px;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+    table {
+      width: 94%;
+    }
+    table, td, th {
+      border : 1px solid black;
+      border-collapse : collapse;
+    }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <h2 class="main_title">my-list</h2>
+      <p class="main_title">노래검색</p>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div style="text-align: left;">
+      <p class="sub_title">my-list</p>
+      <h2 class="sub_title">좋아요 곡</h2>
+    </div>
+
+    <table id="songListTable">
+      <tr>
+        <th style="width: 15%;">No</th>
+        <th>제목</th>
+        <th style="width: 10%;">가수</th>
+        <th style="width: 20%;">번호</th>
+        <th style="width: 20%;">업체</th>
+      </tr>
+      <tr th:each="list, i : ${likeList}">
+        <td th:text="${i.index+1}">1</td>
+        <td th:text="${list.title}">제목</td>
+        <td th:text="${list.singer}">가수</td>
+        <td th:text="${list.songNo}">번호</td>
+        <td th:text="${list.brand}">업체</td>
+      </tr>
+    </table>
+    <input type="button" id="more" value="더보기" onclick="javascript:searchLikelist();">
+    <input type="hidden" id="userId" th:value="${session.userId}">
+  </div>
+</div>
+<script type="text/javascript">
+  const userId = $("#userId").val();
+  let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
+
+  function searchLikelist() {
+    $.ajax({
+      url: "/api/like/"+userId+"?offset="+offset,
+      type: "GET",
+    }).done((result) => {
+      $(result).each((index, data) => {
+        $("#songListTable").append(
+            $("<tr></tr>")
+              .append($("<td></td>").text(index+1))
+              .append($("<td></td>").text(data.title))
+              .append($("<td></td>").text(data.singer))
+              .append($("<td></td>").text(data.songNo))
+              .append($("<td></td>").text(data.brand))
+        );
+        offset = this.id;
+      });
+    });
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>

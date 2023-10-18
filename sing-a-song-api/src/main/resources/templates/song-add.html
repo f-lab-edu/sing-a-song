@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #add, #cancel {
+      background-color: #E9B9FF;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <h2 class="main_title">my-list</h2>
+      <p class="main_title">노래검색</p>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div>
+      <p style="display: inline-block;"><b>My List : </b></p>
+      <select id="myList" style="width:70%;"></select>
+
+      <input type="button" id="add" value="추가" onclick="javascript:add();">
+      <input type="button" id="cancel" value="취소" onclick="javascript:cancel();">
+      <input type="hidden" id="userId" th:value="${session.userId}">
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  const userId = $("#userId").val();
+  const songId = "[[${songId}]]";
+  getMyList();
+
+  function getMyList() {
+    $.ajax({
+      url: "/api/playlist/"+userId,
+      type: "GET"
+    }).done((result) => {
+      $(result).each(function () {
+        $("#myList").append(
+            $("<option></option>").text(this.title).attr("value", this.id)
+        );
+      });
+    });
+  }
+
+  function add() {
+    const playlistId = $("#myList option:selected").val();
+
+    if(playlistId == '') {
+      alert("목록을 선택해 주세요.");
+      return false;
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/api/playlist/song/"+playlistId+"/"+songId,
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("Content-type","application/json");
+      },
+      success: () => {
+        location.href = "/song"
+      }
+    });
+  }
+
+  function cancel() {
+    location.href = "/song";
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>

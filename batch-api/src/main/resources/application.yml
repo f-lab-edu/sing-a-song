@@ -1,0 +1,23 @@
+spring:
+    config:
+        import: secret/application-secret.yml, secret/oauth-secret.yml
+    batch:
+        job:
+            enabled: true
+            names: ${job.name:NONE}
+        jdbc:
+            initialize-schema: always
+
+manual:
+    parameters:
+        release-date:
+
+logging:
+    level:
+        jdbc:
+            audit: OFF
+            resultset: OFF
+            resultsettable: OFF
+            sqlonly: OFF
+            sqltiming: OFF
+            connection: OFF

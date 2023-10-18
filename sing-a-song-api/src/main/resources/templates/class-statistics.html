@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    .sub_title {
+      font-size: 20px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+    table {
+      width: 94%;
+    }
+    table, td, th {
+      border : 1px solid black;
+      border-collapse : collapse;
+    }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+    #dateStandard {
+      text-align: right;
+      font-weight: bold;
+    }
+    #search {
+      display: block;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <p class="main_title">all</p>
+      <p2 class="main_title">my-list</p2>
+      <p class="main_title">노래검색</p>
+      <h2 class="main_title">랭킹</h2>
+    </div>
+
+    <div style="text-align: left;">
+      <h2 class="sub_title">구분별</h2>
+      <p class="sub_title"><a href="javascript:likeList();">좋아요 순</a></p>
+    </div>
+
+    <table>
+      <tr>
+        <td style="text-align: left;">
+          <input type="radio" name="brand" value="KUMYOUNG" checked>금영
+          <input type="radio" name="brand" value="TJ">tj
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">
+          <input type="radio" name="gender" value="M" checked>남
+          <input type="radio" name="gender" value="F">여
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">
+          <input type="radio" name="ageGroup" value="10-19" checked>10대
+          <input type="radio" name="ageGroup" value="20-29">20대
+          <input type="radio" name="ageGroup" value="30-39">30대
+          <input type="radio" name="ageGroup" value="40-49">40대
+          <input type="radio" name="ageGroup" value="50-59">50대
+          <input type="radio" name="ageGroup" value="60-69">60대 이상
+        </td>
+      </tr>
+    </table>
+    <input type="button" id="search" value="검색" onclick="javascript:getClassStatistics();">
+
+    <table id="statisticsTable">
+      <tr>
+        <th style="width: 5%;">No</th>
+        <th>제목</th>
+        <th style="width: 10%;">가수</th>
+        <th style="width: 10%;">번호</th>
+        <th style="width: 10%;">업체</th>
+      </tr>
+      <tr th:each="list, i : ${statisticsList}">
+        <td th:text="${i.index+1}">1</td>
+        <td th:text="${list.id}" hidden>1</td>
+        <td th:text="${list.title}">제목</td>
+        <td th:text="${list.singer}">가수</td>
+        <td th:text="${list.songNo}">번호</td>
+        <td th:text="${list.brand}">업체</td>
+      </tr>
+    </table>
+    <p id="dateStandard">해당 통계는 지난 주 일요일 기준으로 집계된 순위입니다.</p>
+  </div>
+</div>
+<script type="text/javascript">
+  function likeList() {
+    location.href = "/statistics/like";
+  }
+
+  function getClassStatistics() {
+    const brand = $('input[name=brand]:checked').val();
+    const gender = $('input[name=gender]:checked').val();
+    const ageGroup = $('input[name=ageGroup]:checked').val();
+
+    $.ajax({
+      url: "/api/statistics/class/"+brand+"/"+gender+"/"+ageGroup,
+      type: "GET",
+    }).done((result) => {
+      $("#statisticsTable tr:not(:first)").remove();
+      $(result).each(function(index){
+        $("#statisticsTable").append(
+          $("<tr></tr>")
+            .append($("<td></td>").text(index+1))
+            .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
+            .append($("<td></td>").text(this.title))
+            .append($("<td></td>").text(this.singer))
+            .append($("<td></td>").text(this.songNo))
+            .append($("<td></td>").text(this.brand))
+        );
+      });
+    });
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>

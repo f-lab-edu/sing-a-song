@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sing-a-song</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js" integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH" crossorigin="anonymous"></script>
+  <style>
+    h2 {
+      display: inline-block;
+      padding: 0 50px;
+      text-decoration: underline;
+    }
+    .main_title {
+      font-size: 30px;
+      display: inline-block;
+      padding: 0 50px;
+    }
+    input[type="button"] {
+      background-color: lightgrey;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+    }
+    #logout {
+      background-color: lightgrey;
+    }
+    #more {
+      background-color: lightgray;
+      float: right;
+      margin-right: 60px;
+      margin-top: 10px;
+    }
+    #share {
+      background-color: #FBFF7C;
+    }
+    #name {
+      border: none;
+      text-align: right;
+      font-weight: bold;
+    }
+    table {
+      width: 94%;
+    }
+    table, td, th {
+      border : 1px solid black;
+      border-collapse : collapse;
+    }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+    #searchConditionTable table, td, th {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<div style="width: 1000px;">
+  <div style="text-align: center;">
+    <div>
+      <img src="/images/mic_icon.png" width="40px">
+      <h3 style="display: inline-block; font-size: 30px; margin-right: 500px;">sing-a-song</h3>
+
+      <input type="text" id="name" th:value="${session.loginUser.name}" readonly />
+      <input type="button" id="logout" value="로그아웃" onclick="javascript:logout();">
+    </div>
+
+    <div style="text-align: left;">
+      <h2 class="main_title">all</h2>
+      <p class="main_title">my-list</p>
+      <p class="main_title">노래검색</p>
+      <p class="main_title">랭킹</p>
+    </div>
+
+    <div>
+      <table id="searchConditionTable">
+        <tr>
+          <td>
+            <select id="searchCondition" style="width:85%;">
+              <option value="TITLE" selected>목록명</option>
+              <option value="NAME">생성자</option>
+            </select>
+          </td>
+          <td><input type="text" id="searchWord" style="width:100%;"/></td>
+          <td><input type="button" id="select" value="검색" onclick="javascript:searchPlaylist();"></td>
+        </tr>
+      </table>
+    </div>
+
+    <table id="playlistTable">
+      <tr>
+        <th style="width: 15%;">No</th>
+        <th>목록명</th>
+        <th style="width: 10%;">생성자</th>
+        <th style="width: 20%;">공유하기</th>
+      </tr>
+      <tr th:each="list, i : ${playlist}">
+        <td th:text="${i.index+1}">1</td>
+        <td th:text="${list.id}" hidden>1</td>
+        <td th:text="${list.title}" th:onclick="playlistDetail([[${list.id}]])">신나는</td>
+        <td th:text="${list.name}">생성자</td>
+        <td><input type="button" id="share" value="공유하기" th:onclick="sharePlaylist([[${list.id}]])"></td>
+      </tr>
+    </table>
+    <input type="button" id="more" value="더보기" onclick="javascript:searchPlaylist();">
+    <input type="hidden" id="userId" th:value="${session.userId}">
+  </div>
+</div>
+<script type="text/javascript">
+  const userId = $("#userId").val();
+  let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
+
+  function searchPlaylist() {
+    const searchCondition = $("#searchCondition option:selected").val();
+    const searchWord = $("#searchWord").val();
+
+    $.ajax({
+      url: "/api/playlist/searchAll?offset="+offset+"&searchCondition="+searchCondition+"&searchWord="+searchWord,
+      type: "GET",
+    }).done((result) => {
+      $(result).each(() => {
+        $("#playlistTable").append(
+          $("<tr></tr>")
+            .append($("<td></td>").text(this.id))
+            .append($("<td></td>").text(this.id).attr("hidden", "hidden"))
+            .append($("<td></td>").text(this.title).attr("onclick", "playlistDetail('"+this.id+"')"))
+            .append($("<td></td>").text(this.name))
+            .append($("<td></td>").append($("<input></input>").attr("id", "share").attr("type", "button").attr("value","공유하기")
+              .attr("onclick", "sharePlaylist("+this.id+")")))
+        );
+        offset = this.id;
+      });
+    });
+  }
+
+  function playlistDetail(playlistId) {
+    location.href = "/playlist/song/all/"+playlistId;
+  }
+
+  Kakao.init("[[${javascriptKey}]]");
+  function sharePlaylist(playlistId) {
+    Kakao.Share.sendCustom({
+      templateId: Number("[[${templateId}]]"),
+      templateArgs: {
+        'callbackUrl': 'http://localhost:8080/playlist/song/'+playlistId,
+      }
+    });
+  }
+
+  function logout() {
+    $.ajax({
+      url: "/logout",
+      type: "POST",
+    }).done(() => location.href = "/");
+  }
+</script>
+</body>
+</html>
