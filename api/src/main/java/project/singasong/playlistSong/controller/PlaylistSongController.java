@@ -55,13 +55,7 @@ public class PlaylistSongController {
     }
 
     private List<PlaylistSongPagingDto> findPlaylistSong(Long playlistId, long offset, Model model) {
-        PlaylistSongPagingDto playlistSongPagingDto = PlaylistSongPagingDto.builder()
-            .playlistId(playlistId)
-            .offset(offset)
-            .build();
-
-        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistId(playlistSongPagingDto);
-
+        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistId(PlaylistSongPagingDto.of(playlistId, offset));
         model.addAttribute("playlistId", playlistId);
 
         if(!playlistSongList.isEmpty()) {
@@ -74,13 +68,8 @@ public class PlaylistSongController {
     private List<PlaylistSongPagingDto> findByPlaylistIdAndLike(Long playlistId, long offset,
         HttpServletRequest request, Model model) {
 
-        PlaylistSongPagingDto playlistSongPagingDto = PlaylistSongPagingDto.builder()
-            .playlistId(playlistId)
-            .userId((Long) request.getSession().getAttribute("userId"))
-            .offset(offset)
-            .build();
-
-        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistIdAndLike(playlistSongPagingDto);
+        Long userId = (Long) request.getSession().getAttribute("userId");
+        List<PlaylistSongPagingDto> playlistSongList = playlistSongService.findByPlaylistIdAndLike(PlaylistSongPagingDto.userOf(playlistId, userId, offset));
 
         model.addAttribute("playlistId", playlistId);
 

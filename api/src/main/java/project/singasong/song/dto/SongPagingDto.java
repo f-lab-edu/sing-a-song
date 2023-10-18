@@ -9,7 +9,8 @@ import project.singasong.song.enums.SearchConditionType;
 @Builder
 public class SongPagingDto {
 
-    private int limit = 10;
+    private static int limitSize = 10;
+    private int limit;
     private long offset;
 
     private Long id;
@@ -24,7 +25,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .singer(searchWord)
-                    .limit(10)
+                    .limit(limitSize)
                     .offset(offset)
                     .build();
             }
@@ -32,7 +33,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .title(searchWord)
-                    .limit(10)
+                    .limit(limitSize)
                     .offset(offset)
                     .build();
             }
@@ -40,7 +41,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .songNo(searchWord)
-                    .limit(10)
+                    .limit(limitSize)
                     .offset(offset)
                     .build();
             }

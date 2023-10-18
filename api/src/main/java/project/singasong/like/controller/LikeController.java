@@ -43,12 +43,7 @@ public class LikeController {
     }
 
     private List<LikePagingDto> findByUserId(Long userId, long offset, Model model) {
-        LikePagingDto likePagingDto = LikePagingDto.builder()
-            .userId(userId)
-            .offset(offset)
-            .build();
-
-        List<LikePagingDto> likeList = likeService.findByUserId(likePagingDto);
+        List<LikePagingDto> likeList = likeService.findByUserId(LikePagingDto.of(userId, offset));
 
         if(!likeList.isEmpty()) {
             model.addAttribute("likeList", likeList);

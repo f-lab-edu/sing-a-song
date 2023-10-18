@@ -8,7 +8,8 @@ import project.singasong.song.enums.SearchConditionType;
 @Builder
 public class PlaylistPagingDto {
 
-    private int limit = 5;
+    private static int limitSize = 5;
+    private int limit;
     private long offset;
     private Long userId;
     private String title;
@@ -17,14 +18,14 @@ public class PlaylistPagingDto {
     public static PlaylistPagingDto of(Long userId, long offset) {
         return PlaylistPagingDto.builder()
             .userId(userId)
-            .limit(5)
+            .limit(limitSize)
             .offset(offset)
             .build();
     }
 
     public static PlaylistPagingDto allOf(long offset) {
         return PlaylistPagingDto.builder()
-            .limit(5)
+            .limit(limitSize)
             .offset(offset)
             .build();
     }
@@ -34,14 +35,14 @@ public class PlaylistPagingDto {
             case TITLE -> {
                 return PlaylistPagingDto.builder()
                     .title(searchWord)
-                    .limit(5)
+                    .limit(limitSize)
                     .offset(offset)
                     .build();
             }
             case NAME -> {
                 return PlaylistPagingDto.builder()
                     .name(searchWord)
-                    .limit(5)
+                    .limit(limitSize)
                     .offset(offset)
                     .build();
             }
