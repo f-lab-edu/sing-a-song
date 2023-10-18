@@ -17,12 +17,14 @@ public class PlaylistPagingDto {
     public static PlaylistPagingDto of(Long userId, long offset) {
         return PlaylistPagingDto.builder()
             .userId(userId)
+            .limit(5)
             .offset(offset)
             .build();
     }
 
     public static PlaylistPagingDto allOf(long offset) {
         return PlaylistPagingDto.builder()
+            .limit(5)
             .offset(offset)
             .build();
     }
@@ -32,12 +34,14 @@ public class PlaylistPagingDto {
             case TITLE -> {
                 return PlaylistPagingDto.builder()
                     .title(searchWord)
+                    .limit(5)
                     .offset(offset)
                     .build();
             }
             case NAME -> {
                 return PlaylistPagingDto.builder()
                     .name(searchWord)
+                    .limit(5)
                     .offset(offset)
                     .build();
             }

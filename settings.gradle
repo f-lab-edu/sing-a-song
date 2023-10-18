@@ -1,5 +1,5 @@
 rootProject.name = 'sing-a-song'
 
-include 'batch-api'
-include 'common-api'
-include 'sing-a-song-api'
+include 'batch'
+include 'common'
+include 'api'

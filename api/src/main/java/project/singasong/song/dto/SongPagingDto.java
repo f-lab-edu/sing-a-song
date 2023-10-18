@@ -24,6 +24,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .singer(searchWord)
+                    .limit(10)
                     .offset(offset)
                     .build();
             }
@@ -31,6 +32,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .title(searchWord)
+                    .limit(10)
                     .offset(offset)
                     .build();
             }
@@ -38,6 +40,7 @@ public class SongPagingDto {
                 return SongPagingDto.builder()
                     .brand(brand)
                     .songNo(searchWord)
+                    .limit(10)
                     .offset(offset)
                     .build();
             }
