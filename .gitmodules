@@ -1,0 +1,6 @@
+[submodule "api/src/main/resources/secret"]
+	path = api/src/main/resources/secret
+	url = https://github.com/j-jeongeun/sing-a-song-secret.git
+[submodule "batch/src/main/resources/secret"]
+	path = batch/src/main/resources/secret
+	url = https://github.com/j-jeongeun/sing-a-song-secret.git
