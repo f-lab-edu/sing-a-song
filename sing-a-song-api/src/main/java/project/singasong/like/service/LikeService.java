@@ -44,7 +44,7 @@ public class LikeService {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 60 * 1000, initialDelay = 60 * 1000) // 60초 대기 후, 60초마다 실행
+    @Scheduled(fixedDelay = 5 * 1000, initialDelay = 5 * 1000) // 5초 대기 후, 5초마다 실행
     public void publishLike() {
         SetOperations<String, Like> setOperations = likeRedisTemplate.opsForSet();
         Set<Like> likes = setOperations.members("like");
@@ -60,7 +60,6 @@ public class LikeService {
         unlikes.forEach((unlike) -> {
             likeRepository.unLike(unlike);
             setOperations.remove("unlike", unlike);
-            setOperations.remove("like", unlike);
         });
 
         log.info("publish like data: Redis Server -> DB");

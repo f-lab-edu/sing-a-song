@@ -42,8 +42,13 @@
       border : 1px solid black;
       border-collapse : collapse;
     }
-    #like, #unlike {
+    .like, .unlike {
       color: red;
+      border: none;
+      text-align: center;
+    }
+    input:focus {
+      outline: none;
     }
   </style>
 </head>
@@ -86,8 +91,12 @@
         <td th:text="${list.songNo}">번호</td>
         <td th:text="${list.brand}">업체</td>
         <td>
-          <span id="like" th:if="${list.isLike == false}" th:onclick="likeSong([[${list.songId}]])">♡</span>
-          <span id="unlike" th:if="${list.isLike == true}" th:onclick="likeSong([[${list.songId}]])">♥</span>
+          <span th:if="${list.isLike == false}" th:onclick="likeSong([[${list.songId}]], [[${i.index+1}]], false)">
+            <input type="text" th:id="'like'+${i.index+1}" class="like" value="♡" />
+          </span>
+          <span th:if="${list.isLike == true}" th:onclick="likeSong([[${list.songId}]], [[${i.index+1}]], true)">
+            <input type="text" th:id="'unlike'+${i.index+1}" class="unlike" value="♥" />
+          </span>
         </td>
         <td th:text="${list.songId}" hidden></td>
       </tr>
@@ -101,11 +110,27 @@
   const playlistId = "[[${playlistId}]]";
   let offset = "[[${offset}]]" === '' ? 0 : "[[${offset}]]";
 
-  function likeSong(songId) {
+  function likeSong(songId, index, isLike) {
     $.ajax({
       url: "/like/"+userId+"/"+songId,
       type: "POST",
-    }).done(() => location.href = "/playlist-song/all/"+playlistId);
+    }).done(() => {
+      const like = $("#like"+index).val();
+      const unlike = $("#unlike"+index).val();
+      if(isLike) {
+        if(unlike == "♥") {
+          $("#unlike"+index).val("♡");
+        } else {
+          $("#unlike"+index).val("♥");
+        }
+      } else {
+        if(like == "♡") {
+          $("#like"+index).val("♥");
+        } else {
+          $("#like"+index).val("♡");
+        }
+      }
+    });
   }
 
   function more() {
